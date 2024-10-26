@@ -1,0 +1,95 @@
+---
+import ButtonLetter from "../components/ButtonLetter.astro";
+import Item from "../components/Item.astro";
+import ListItems from "../components/Item.astro";
+import { Image } from 'astro:assets';
+import myImage from '../assets/images/amazonas1.jpg'; 
+
+
+
+
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuna Awainan: Fauna</title>
+</head>
+<body>
+    <div class="Fauna">
+        <div class="letras">
+            <ButtonLetter letter="A"></ButtonLetter>
+            <ButtonLetter letter="B"></ButtonLetter>
+            <ButtonLetter letter="C"></ButtonLetter>
+            <ButtonLetter letter="D"></ButtonLetter>
+            <ButtonLetter letter="E"></ButtonLetter>
+            <ButtonLetter letter="F"></ButtonLetter>
+            <ButtonLetter letter="G"></ButtonLetter>
+            <ButtonLetter letter="H"></ButtonLetter>
+            <ButtonLetter letter="I"></ButtonLetter>
+            <ButtonLetter letter="J"></ButtonLetter>
+            <ButtonLetter letter="K"></ButtonLetter>
+            <ButtonLetter letter="L"></ButtonLetter>
+            <ButtonLetter letter="M"></ButtonLetter>
+            <ButtonLetter letter="N"></ButtonLetter>
+            <ButtonLetter letter="O"></ButtonLetter>
+            <ButtonLetter letter="P"></ButtonLetter>
+            <ButtonLetter letter="Q"></ButtonLetter>
+            <ButtonLetter letter="R"></ButtonLetter>
+            <ButtonLetter letter="S"></ButtonLetter>
+            <ButtonLetter letter="T"></ButtonLetter>
+            <ButtonLetter letter="W"></ButtonLetter>
+            <ButtonLetter letter="X"></ButtonLetter>
+            <ButtonLetter letter="Y"></ButtonLetter>
+            <ButtonLetter letter="Z"></ButtonLetter>
+        </div>
+        
+        <ListItems>
+        </ListItems>
+
+        <Image src={myImage} alt=""/>
+
+    </div>
+</body>
+</html>
+<style>
+    .Fauna{
+        width: 80%;
+        height: 700px;
+        background-color: white;
+        display: grid;
+        grid-template-columns: 15% 40% 45%;
+    }
+    .letras{
+        width: 100%;
+        font-weight: 800;
+        margin: auto;
+        margin-top:40px;
+    }
+    .info{
+        position: absolute;
+        margin: 30px 40px;
+    }
+    .titulo-letra{
+        font-family: "Quicksand", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 700;
+        font-style: normal;
+        font-size: 34px;
+        text-decoration: underline;
+        color:#0cc0df;
+    }
+    .info-texto{
+        height: 400px;
+    }
+    .lista-animales{
+        color: #0cc0df
+    }
+    .animal_item{
+        cursor: pointer;
+    }
+    .animal_item:hover{
+        text-decoration: underline;
+    }
+</style>

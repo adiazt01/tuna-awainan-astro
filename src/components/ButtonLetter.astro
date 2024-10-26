@@ -1,0 +1,23 @@
+---
+const {letter} = Astro.props
+---
+
+<button class="letra" id={letter}>{letter}</button></br>
+
+<style>
+    .letra{
+        width: 30px;
+        height: 30px;
+        background-color: white;
+        margin: 2px 37%;
+        font-size: 20px;
+        text-align: center;
+        border-radius: 50%;
+        border: none;
+        color: #0cc0df;
+    }
+    .letra:hover{
+        background-color: #0cc0df;
+        color: white;
+    }
+</style>

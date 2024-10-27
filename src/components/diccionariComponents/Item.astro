@@ -1,0 +1,19 @@
+---
+
+const {name} = Astro.props;
+---
+
+
+<li id = {name}>{name} <slot/></li>
+
+<style>
+    li{
+        color: #0cc0df;
+        font-size: 24px;
+        list-style: none;
+    }
+    li:hover{
+        text-decoration: underline;
+        cursor:pointer;
+    }
+</style>

@@ -1,0 +1,54 @@
+---
+import CardCategory from "../../components/CardCategory.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const DATA_CATEGORIES_MOCK = [
+  {
+    id: 1,
+    name: "Escasez del agua",
+    image:
+      "https://i.ibb.co/NVTxJ2K/pexels-muhammad-amdad-hossain-1673442328-27794857.jpg",
+  },
+  {
+    id: 2,
+    name: "Calidad del agua",
+    image: "https://i.ibb.co/Rc0g69T/pexels-farlight-13171743.jpg",
+  },
+  {
+    id: 3,
+    name: "Turismo del agua",
+    image:
+      "https://i.ibb.co/TBBTFht/pexels-jose-hilton-pereira-da-silva-49914962-9319766.jpg",
+  },
+  {
+    id: 4,
+    name: "Pueblos indígenas",
+    image: "https://i.ibb.co/bPnm0Bp/pexels-nandofreitasr-17025854.jpg",
+  },
+];
+---
+  <Layout title="Categorías">
+    <section class="grid grid-cols-1">
+      {
+        DATA_CATEGORIES_MOCK.map((data, index) => (
+          <CardCategory name={data.name} color={index} image={data.image} />
+        ))
+      }
+    </section>
+  </Layout>
+
+<script>
+    const wrapper = document.getElementById("wrapper-elements-dictionary");
+
+    const buttons = document.querySelectorAll("button.");
+
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            wrapper?.remove();
+
+            const newWrapper = document.createElement("ul");
+            newWrapper.id = "wrapper-elements-dictionary";
+        
+        });
+    });
+</script>

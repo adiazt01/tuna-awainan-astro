@@ -1,0 +1,29 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { supabase } from "../../../lib/supabase";
+
+const querySearch = new URLSearchParams(Astro.url.search);
+const nameQueryToSearch = querySearch.get("name");
+
+const {data: articles, error: errorArticles} = await supabase
+  .from("posts").select("title, id, tags(name)").like('tags.name', `%${nameQueryToSearch}%`);
+---
+
+<Layout>
+  <h1>Articles</h1>
+  <ul>
+    {
+        articles.map((article) => (
+          <li>
+            <a href={`/categories/articles/${article.id}`}>{article.title}
+            {
+                article.tags.map((tag) => (
+                    <span>{tag.name}</span>
+                ))
+            }
+            </a>
+          </li>
+        ))
+    }
+  </ul>
+</Layout>

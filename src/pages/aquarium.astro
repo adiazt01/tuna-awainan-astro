@@ -2,7 +2,8 @@
 import ButtonLetter from "../components/diccionariComponents/ButtonLetter.astro";
 import Item from "../components/diccionariComponents/Item.astro";
 import ListItems from "../components/diccionariComponents/Item.astro";
-
+import Content from "../components/diccionariComponents/Content.astro";
+import Layout from "../layouts/Layout.astro";
 
 const ANIMALS = [
     'gato1',
@@ -12,16 +13,10 @@ const ANIMALS = [
 ]
 
 const aquarium = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-
+const animals = ['alfonso palma ', 'maria garcia ','cristian bacze','carlos mendez']
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tuna Awainan: Acuario</title>
-</head>
-<body>
+
+<Layout title="Tuna Awainan: Acuario">
     <div class="Fauna">
         <div class="letras">
             {
@@ -30,20 +25,31 @@ const aquarium = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P
                 ))
             }
         </div>
-
+    
         <div class='content'>
+            <!--
+            este es el renderizado de la lista de animales 
             <ListItems>
-                    <Item name='elemento1'>
-                    <Item name='elemento2'> 
+                    {
+                        animals.map((animal)=>(
+                            <Item name={animal}/>
+                        ))
+                    }
             </ListItems>
+            -->
+    
+            <Content ></Content>
         </div>
-
+    
         <div>
+            <img src="../../src/assets/images/amazonas1.jpg" />
         </div>
-
+    
     </div>
-</body>
-</html>
+</Layout>
+
+
+
 <style>
     .Fauna{
         width: 80%;
@@ -71,5 +77,9 @@ const aquarium = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P
         width:70%;
         height: 80%;
         padding:80px 20px;
+    }
+    img{
+        height: 100vh;
+        position: fixed;
     }
 </style>

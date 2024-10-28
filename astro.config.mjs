@@ -10,4 +10,11 @@ export default defineConfig({
   output: "server",
   integrations: [tailwind()],
   adapter: vercel(),
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ['query-string']
+      }
+    }
+  }
 });

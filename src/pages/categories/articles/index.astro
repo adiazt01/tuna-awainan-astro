@@ -14,7 +14,7 @@ const {data: articles, error: errorArticles} = await supabase
   <ul>
     {
         articles.map((article) => (
-          <li>
+          <li >
             <a href={`/categories/articles/${article.id}`}>{article.title}
             {
                 article.tags.map((tag) => (

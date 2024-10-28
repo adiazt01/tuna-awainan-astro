@@ -1,23 +1,21 @@
 ---
 const {letter} = Astro.props
+
+const querySearch = new URLSearchParams(Astro.url.search);
+const nameQueryToSearch = querySearch.get("selected");
+
+const name = nameQueryToSearch || "";
 ---
+<a type="button" href={`/aquarium/letter?selected=${letter}`}
+class:list={
+[
+  "text-white cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-sm text-center inline-flex items-center font-bold me-2 px-3.5 py-2.5 hover:bg-[#0cc0df] hover:opacity-80 transition",
+  name === letter ? "bg-[#0cc0df] opacity-80" : "opacity-100 text-[#0cc0df] hover:text-white"
+]
+} >
+    {`${letter}`}
+    <span class="sr-only">{`${letter}`}</span>
+</a>
+<script>
 
-<button class="letra" id={letter}>{letter}</button>
-
-<style>
-    .letra{
-        width: 30px;
-        height: 30px;
-        background-color: white;
-        margin: 2px 37%;
-        font-size: 20px;
-        text-align: center;
-        border-radius: 50%;
-        border: none;
-        color: #0cc0df;
-    }
-    .letra:hover{
-        background-color: #0cc0df;
-        color: white;
-    }
-</style>
+</script>

@@ -4,16 +4,23 @@ import { supabase } from "../../../../lib/supabase";
 
 const {id} = Astro.params;
 
+if (!id) {
+  return Astro.redirect("/404");
+}
+
 const {data, error} = await supabase
   .from("posts")
   .select("*")
-  .eq("id", id)
+  .eq("id", id?.toString())
+
+
+if (error || !data.length) {
+  return Astro.redirect("/404");
+}
+
 ---
 
-<Layout>
+<Layout title={data[0].title}>
   <h1>{data[0].title}</h1>
   <p>{data[0].content}</p>
 </Layout>
-
-
-

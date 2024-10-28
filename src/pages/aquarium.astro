@@ -1,10 +1,7 @@
 ---
 import ButtonLetter from "../components/diccionariComponents/ButtonLetter.astro";
 import Item from "../components/diccionariComponents/Item.astro";
-import Content from '../components/diccionariComponents/content.astro';
 import ListItems from "../components/diccionariComponents/Item.astro";
-import { Image } from 'astro:assets';
-import myImage from '../assets/images/amazonas1.jpg'; 
 
 
 const ANIMALS = [
@@ -14,6 +11,7 @@ const ANIMALS = [
     'gato4'
 ]
 
+const aquarium = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
 
 ---
 <!DOCTYPE html>
@@ -26,30 +24,11 @@ const ANIMALS = [
 <body>
     <div class="Fauna">
         <div class="letras">
-            <ButtonLetter letter="A"/>
-            <ButtonLetter letter="B"/>
-            <ButtonLetter letter="C"/>
-            <ButtonLetter letter="D"/>
-            <ButtonLetter letter="E"/>
-            <ButtonLetter letter="F"/>
-            <ButtonLetter letter="G"/>
-            <ButtonLetter letter="H"/>
-            <ButtonLetter letter="I"/>
-            <ButtonLetter letter="J"/>
-            <ButtonLetter letter="K"/>
-            <ButtonLetter letter="L"/>
-            <ButtonLetter letter="M"/>
-            <ButtonLetter letter="N"/>
-            <ButtonLetter letter="O"/>
-            <ButtonLetter letter="P"/>
-            <ButtonLetter letter="Q"/>
-            <ButtonLetter letter="R"/>
-            <ButtonLetter letter="S"/>
-            <ButtonLetter letter="T"/>
-            <ButtonLetter letter="W"/>
-            <ButtonLetter letter="X"/>
-            <ButtonLetter letter="Y"/>
-            <ButtonLetter letter="Z"/>
+            {
+                aquarium.map((lette)=>(
+                    <ButtonLetter letter={lette}/>
+                ))
+            }
         </div>
 
         <div class='content'>
@@ -60,7 +39,6 @@ const ANIMALS = [
         </div>
 
         <div>
-            <Image src={myImage} alt=""/>
         </div>
 
     </div>

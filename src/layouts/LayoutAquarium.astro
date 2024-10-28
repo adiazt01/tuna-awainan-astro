@@ -1,0 +1,30 @@
+---
+import ButtonLetter from "../components/diccionariComponents/ButtonLetter.astro"
+import { supabase } from "../lib/supabase"
+import Layout from "./Layout.astro"
+
+const {data, error} =  await supabase.from('animals').select('*')
+
+if (error) {
+  return Astro.redirect('/404')
+}
+
+const lettersAllowed = new Set()
+
+data.forEach((animal) => {
+  const firstLetter = animal.common_name.charAt(0).toUpperCase()
+  lettersAllowed.add(firstLetter)
+})
+
+const aquarium = Array.from(lettersAllowed).sort()
+---
+<Layout>
+<section class="grid grid-cols 1">
+    <div class="flex flex-row pt-8  justify-center flex-wrap gap-x-4 gap-y-4">
+            {aquarium.map((letter) => (
+                <ButtonLetter letter={letter} />
+            ))}
+    </div>
+</section>
+<slot/>
+</Layout>

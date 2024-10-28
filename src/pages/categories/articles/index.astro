@@ -10,7 +10,10 @@ const { data: articles, error: errorArticles } = await supabase
   .select("title, id, tags(name), coverimage, content")
   .like("tags.name", `%${nameQueryToSearch}%`);
 
-console.log(articles)
+if (errorArticles || !articles.length) {
+  return Astro.redirect("/404");
+}
+
 ---
 
 <Layout title="Tuna Awainan: Articulos">

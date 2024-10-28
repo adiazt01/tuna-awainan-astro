@@ -4,10 +4,20 @@ import { supabase } from "../../../../lib/supabase";
 
 const {id} = Astro.params;
 
+if (!id) {
+  return Astro.redirect("/404");
+}
+
 const {data, error} = await supabase
   .from("posts")
   .select("*")
-  .eq("id", id)
+  .eq("id", id?.toString())
+
+
+if (error || !data.length) {
+  return Astro.redirect("/404");
+}
+
 ---
 
 <Layout title="Tuna Awainan: ">
@@ -42,7 +52,5 @@ const {data, error} = await supabase
     padding: 20px 40px;
     text-align: justify;
   }
-  
+
 </style>
-
-

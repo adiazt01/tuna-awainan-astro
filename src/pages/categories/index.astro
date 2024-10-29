@@ -31,11 +31,16 @@ const DATA_CATEGORIES_MOCK = [
     <section class="grid grid-cols-1">
       {
         DATA_CATEGORIES_MOCK.map((data, index) => (
-          <CardCategory name={data.name} color={index} image={data.image} />
+          <CardCategory  name={data.name} color={index} image={data.image} />
         ))
       }
     </section>
   </Layout>
+
+<style>
+
+</style>
+
 
 <script>
     const wrapper = document.getElementById("wrapper-elements-dictionary");

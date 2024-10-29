@@ -48,6 +48,20 @@ const hasPreviousPage = page > 1;
 ---
 
 <Layout title="Tuna Awainan: Articulos">
+  <div class="items-center justify-center mt-5">
+      <a
+      href={`/categories/articles?name=${nameQueryToSearch}&page=${page - 1}`}
+      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ${!hasPreviousPage ? "pointer-events-none opacity-50" : ""}`}
+    >
+      Anterior
+    </a>
+    <a
+      href={`/categories/articles?name=${nameQueryToSearch}&page=${page + 1}`}
+      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ${!hasNextPage ? "pointer-events-none opacity-50" : ""}`}
+    >
+      Siguiente
+    </a>
+  </div>
   <section
     class="w-full px-8 pt-14 gap-24 grid grid-cols-1 lg:grid-cols-2 mx-auto"
   >
@@ -96,18 +110,7 @@ const hasPreviousPage = page > 1;
         }
       </ul>
       <div class="flex justify-center mt-8">
-        <a
-          href={`/categories/articles?name=${nameQueryToSearch}&page=${page - 1}`}
-          class={`px-4 py-2 mx-1 text-gray-700 bg-white border rounded-md ${!hasPreviousPage ? "pointer-events-none opacity-50" : ""}`}
-        >
-          Anterior
-        </a>
-        <a
-          href={`/categories/articles?name=${nameQueryToSearch}&page=${page + 1}`}
-          class={`px-4 py-2 mx-1 text-gray-700 bg-white border rounded-md ${!hasNextPage ? "pointer-events-none opacity-50" : ""}`}
-        >
-          Siguiente
-        </a>
+       
       </div>
     </div>
     <div class="flex flex-col gap-8">

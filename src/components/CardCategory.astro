@@ -7,14 +7,13 @@ const { image, name, index } = Astro.props;
 const query = qs.stringifyUrl(
     {
         url: "/categories/articles",
-        query: {
-            name: name,
-        },
+        query: {name: name}
     }
 );
 
 console.log(query);
 ---
+
 
 <a
   href={query}
@@ -36,3 +35,9 @@ console.log(query);
     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{index}</p>
   </div>
 </a>
+
+<style>
+  a{
+    margin: 20px 60px;
+  }
+</style>

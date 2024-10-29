@@ -179,8 +179,11 @@ if (Astro.request.method === "POST") {
       </button>
     </form>
 
-    
+
   </div>
+  <a href={'/categories/articles'} class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+    Atrás 
+  </a>
 </Layout>
 
 <style>
@@ -197,5 +200,8 @@ if (Astro.request.method === "POST") {
 
   #comments-list > div {
     animation: fadeIn 0.5s ease-out;
+  }
+  a{
+    margin: 60px 40px; 
   }
 </style>

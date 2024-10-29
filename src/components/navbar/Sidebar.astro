@@ -2,27 +2,26 @@
 import SidebarItem from "./SidebarItem.astro";
 
 const LINKS = [
-  {
-    label: "Inicio",
-    link: "/",
-  },
-  {
-    label: "Acuario",
-    link: "/aquarium",
-  },
-  {
-    label: "Articulos",
-    link: "/categories",
-  },
-  {
-    label: "Nosotros",
-    link: "/about",
-  },
-];
-
-const { cookies } = Astro;
-const accessToken = cookies.get("sb-access-token");
-const refreshToken = cookies.get("sb-refresh-token");
+    {
+        label: 'Inicio',
+        link: '/'
+    },
+    {
+        label: 'Comunidad',
+        link: '/comunity'
+    },
+    {
+        label: 'Acuario',
+        link: '/aquarium'
+    },
+    {
+        label: 'Articulos',
+        link: '/categories'
+    }, {
+        label: 'Nosotros',
+        link: '/Nosotros'  
+    }
+]
 ---
 
 <aside

@@ -1,6 +1,7 @@
 ---
 import LayoutAquarium from "../../../../layouts/LayoutAquarium.astro";
 import { supabase } from "../../../../lib/supabase";
+import '@fontsource-variable/quicksand';
 
 const {id} = Astro.params;
 
@@ -20,8 +21,36 @@ if (error || !data.length) {
 { data.map((animal) => (
   <div >
     <h2>{animal.common_name}</h2>
-    <p>{animal.scientific_name}</p>
+    <h3> &quot;{animal.scientific_name}&quot; </h3>
+    <p>&emsp;&emsp;{animal.info}</p>
+    <img src={animal.image}/>
   </div>
 ))
 }
 </LayoutAquarium>
+<style>
+  div{
+    font-family: 'Quicksand Variable', sans-serif;
+  }
+  h2{
+    font-size: 48px;
+    color:#0cc0df;
+    margin-left: 60px;
+  }
+  h3{
+    font-size: 38px;
+    font-style: italic;
+    margin-left: 60px;
+  }
+  p{
+    padding: 20px 100px;
+  }
+  img{
+    margin:auto;
+    margin-bottom:40px;
+    width: 60%;
+    height: 40%;
+    object-fit: contain;
+  }
+
+</style>

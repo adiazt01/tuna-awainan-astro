@@ -13,19 +13,18 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = await request.formData();
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
+  const username = formData.get("username")?.toString();
 
-  if (!email || !password) {
+  if (!email || !password || !username) {
     return new Response("Email and password are required", { status: 400 });
   }
-
-  console.log(email, password);
   
   const { error , data} = await supabase.auth.signUp({
     email,
     password,
     options: {
         data: {
-            username: "TEXT",
+            username: username,
             role: Role.user
         }
     }

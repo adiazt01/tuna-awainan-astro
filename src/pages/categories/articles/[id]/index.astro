@@ -1,0 +1,56 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import { supabase } from "../../../../lib/supabase";
+
+const {id} = Astro.params;
+
+if (!id) {
+  return Astro.redirect("/404");
+}
+
+const {data, error} = await supabase
+  .from("posts")
+  .select("*")
+  .eq("id", id?.toString())
+
+
+if (error || !data.length) {
+  return Astro.redirect("/404");
+}
+
+---
+
+<Layout title="Tuna Awainan: ">
+  <div>
+    <img src={data[0].coverimage}/>
+    <h2>{data[0].title}</h1>
+    <p>&emsp; &emsp; {data[0].content}</p>
+  </div>
+
+</Layout>
+
+<style>
+  div{
+    border-radius: 25px;
+    text-align: center;
+    width: 60%;
+    height: 600PX;
+    margin: 70px auto;
+    box-shadow: 0 0 40px 0 #000D;
+  }
+  img{
+    width: 600px;
+    height: 40%;
+    object-fit: contain;
+    margin: auto;
+  }
+  h2{
+    font-size: 40px;
+    font-weight: 800;
+  }
+  p{
+    padding: 20px 40px;
+    text-align: justify;
+  }
+
+</style>

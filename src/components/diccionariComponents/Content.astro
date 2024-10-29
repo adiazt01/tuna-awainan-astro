@@ -1,9 +1,12 @@
 ---
 import ListItems from "./ListItems.astro"
 
+const {name,text} = Astro.props
 ---
 <div>
 
+    <h2 name={name}>{name}</h2>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam corporis quaerat obcaecati. Esse consequuntur praesentium, vero totam, quisquam enim non sequi aspernatur, velit dolore ab accusamus quia nostrum necessitatibus deleniti.</p>
     <slot/>
 </div>
 
@@ -14,6 +17,15 @@ import ListItems from "./ListItems.astro"
 
         margin: 50px 15px; 
         background-color: red;
+    }
+
+    h2{
+        background-color: #0cc0df;
+        font-size: 36px;
+    }
+
+    p{
+        padding: 20px 40px;
     }
 
 </style>

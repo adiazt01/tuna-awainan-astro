@@ -28,10 +28,10 @@ const { title } = Astro.props;
 	<body class="min-h-screen">
 		<main class="flex flex-col relative w-full">
 			<Navigation />
-			<main class="h-screen flex-1 sm:ml-64">
-					<slot />		
+			<main class="h-screen sm:pt-0 pt-14 flex-1 sm:px-0 sm:ml-64">
+					<slot />
 			 </main>
-		</main>	
+		</main>
 	</body>
 </html>
 <style is:global>

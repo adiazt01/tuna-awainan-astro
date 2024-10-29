@@ -1,0 +1,27 @@
+---
+import LayoutAquarium from "../../../../layouts/LayoutAquarium.astro";
+import { supabase } from "../../../../lib/supabase";
+
+const {id} = Astro.params;
+
+if (!id) {
+  return Astro.redirect('/404');
+}
+
+const {data, error} = await supabase.from('animals').select('*').eq('id',id);
+
+if (error || !data.length) {
+  return Astro.redirect('/404');
+}
+
+---
+<LayoutAquarium>
+
+{ data.map((animal) => (
+  <div >
+    <h2>{animal.common_name}</h2>
+    <p>{animal.scientific_name}</p>
+  </div>
+))
+}
+</LayoutAquarium>

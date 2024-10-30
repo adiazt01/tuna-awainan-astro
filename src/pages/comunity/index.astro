@@ -1,107 +1,32 @@
 ---
-import ForumCard from "../../components/forumCard.astro";
+import CardComunity from "../../components/CardComunity.astro";
 import Layout from "../../layouts/Layout.astro";
-
-// Datos de categorías de la comunidad
-const DATA_CATEGORIES_COM = [
-  {
-    id: 1,
-    name: "Titulo",
-    descripcion: "talala",
-  },
-  {
-    id: 2,
-    name: "Titulo",
-    descripcion: "talala",
-  },
-  {
-    id: 3,
-    name: "Titulo",
-    descripcion: "talala",
-  },
-  {
-    id: 4,
-    name: "Titulo",
-    descripcion: "talala",
-  },
-  {
-    id: 5,
-    name: "Titulo",
-    descripcion: "talala",
-  },
-  {
-    id: 6,
-    name: "Titulo",
-    descripcion: "talala",
-  }
-];
 ---
 
-<Layout title="Tuna-Awainan-comunidad">
+<Layout title="Tuna-Awainan: Comunidad">
 
-    <section class="grid md:grid-cols-2 xl:grid-cols-3">
-        {
-          // Mapeo de los datos de categorías para crear tarjetas del foro
-          DATA_CATEGORIES_COM.map((data, index) => (
-          <ForumCard name={data.name} color={index} descripcion={data.descripcion}/>
-        ))
-        }
-
-        // Botón para postear
-        <button class="col-start-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Postear</button>
-    </section>
-
-    <div class="ml-2 mr-2 sm:ml-32 sm:mr-32 items-center justify-center post">
-
-       <div class="mb-8 mt-8 bg-white p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-xl w-1/2 unregistred">
-        <h2 class="text-2xl font-bold text-gray-900">Debes estar registrado para poder postear</h2>
-        // Botón de confirmación
-        <button class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Confirm</button>
-       </div>
-
-       // Formulario para crear un nuevo post
-       <form
-          method="POST"
-          class="mb-8 mt-8 bg-white p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-xl"
-        >
-          <div class="mb-4">
-            <label
-              for="content"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >Tu post</label
-            >
-            <textarea
-              id="content"
-              name="content"
-              rows="4"
-              required
-              class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
-              placeholder="Escribe tu post aquí"></textarea>
-          </div>
-          <button
-            type="submit"
-            class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 inline-block mr-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
-                clip-rule="evenodd"></path>
-            </svg>
-            Enviar Post
-          </button>
-        </form>
+    <div>
+        <CardComunity name={"Foro de discusión"} 
+                    img={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUzoEL0gR8B9SxoO4pp1lHEpETHJLjus0-8Q&s" }
+                    content={"¿Te apasiona el hablar sobre el Agua? ¡Únete a nuestra comunidad en línea y comparte tus conocimientos y opiniones con otros entusiastas!"}
+                    index={'comunity/forum'}/>
+        
+        <CardComunity name="Publicaciones" 
+                    img="https://manija.com.ar/wp-content/uploads/2020/12/posteohecho.png" 
+                    content="¿Tienes algo que aportar? ¡Comparte tus experiencias y conocimientos con nuestra comunidad! Tus ideas son valiosas y pueden inspirar a otros. ¡Anímate a publicar!"
+                    index={'comunity/posters'}/>
     </div>
 </Layout>
 
 <style>
-button{
-  width: 100px;
-  margin: 20px 60px;
-}
+    div{
+        margin:auto;
+        display:grid;
+        grid-template-columns: 45% 45%;
+        grid-template-rows: 60%;
+        margin:80px 60px
+    }
+    CardComunity{
+        margin:20px;
+    }
 </style>

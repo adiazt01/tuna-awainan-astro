@@ -1,0 +1,97 @@
+---
+import ButtonLetter from "../components/diccionariComponents/ButtonLetter.astro";
+import Item from "../components/diccionariComponents/Item.astro";
+import Content from '../components/diccionariComponents/Content.astro';
+import ListItems from "../components/diccionariComponents/Item.astro";
+import { Image } from 'astro:assets';
+import myImage from '../assets/images/amazonas1.jpg'; 
+
+
+const ANIMALS = [
+    'gato1',
+    'gato2',
+    'gato3',
+    'gato4'
+]
+
+
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuna Awainan: Acuario</title>
+</head>
+<body>
+    <div class="Fauna">
+        <div class="letras">
+            <ButtonLetter letter="A"/>
+            <ButtonLetter letter="B"/>
+            <ButtonLetter letter="C"/>
+            <ButtonLetter letter="D"/>
+            <ButtonLetter letter="E"/>
+            <ButtonLetter letter="F"/>
+            <ButtonLetter letter="G"/>
+            <ButtonLetter letter="H"/>
+            <ButtonLetter letter="I"/>
+            <ButtonLetter letter="J"/>
+            <ButtonLetter letter="K"/>
+            <ButtonLetter letter="L"/>
+            <ButtonLetter letter="M"/>
+            <ButtonLetter letter="N"/>
+            <ButtonLetter letter="O"/>
+            <ButtonLetter letter="P"/>
+            <ButtonLetter letter="Q"/>
+            <ButtonLetter letter="R"/>
+            <ButtonLetter letter="S"/>
+            <ButtonLetter letter="T"/>
+            <ButtonLetter letter="W"/>
+            <ButtonLetter letter="X"/>
+            <ButtonLetter letter="Y"/>
+            <ButtonLetter letter="Z"/>
+        </div>
+
+        <div class='content'>
+            <ListItems>
+                    <Item name='elemento1'/>
+                    <Item name='elemento2'/> 
+            </ListItems>
+        </div>
+
+        <div>
+            <Image src={myImage} alt=""/>
+        </div>
+
+    </div>
+</body>
+</html>
+<style>
+    .Fauna{
+        width: 80%;
+        height: 700px;
+        background-color: white;
+        display: grid;
+        grid-template-columns: 15% 40% 45%;
+    }
+    .letras{
+        width: 100%;
+        font-weight: 800;
+        margin: auto;
+        margin-top:40px;
+    }
+    .titulo-letra{
+        font-family: "Quicksand", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 700;
+        font-style: normal;
+        font-size: 34px;
+        text-decoration: underline;
+        color:#0cc0df;
+    }
+    .content{
+        width:70%;
+        height: 80%;
+        padding:80px 20px;
+    }
+</style>

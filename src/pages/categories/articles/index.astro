@@ -25,13 +25,13 @@ const to = from + articlesPerPage - 1; // Índice de fin
 // }
 // Obtener la cantidad total de artículos
 const { count: totalArticles, error: errorTotalArticles } = await supabase
-  .from("posts")
+  .from("articles")
   .select("title, id, tags(name), coverimage, content", { count: "exact" })
   .like("tags.name", `%${nameQueryToSearch}%`);
 
 // Obtener los artículos para la página actual
 const { data: articles, error: errorArticles } = await supabase
-  .from("posts")
+  .from("articles")
   .select("title, id, tags(name), coverimage, content")
   .like("tags.name", `%${nameQueryToSearch}%`)
   .range(from, to);
@@ -45,7 +45,7 @@ const { data: categories, error: errorCategories } = await supabase
 
 // Obtener artículos relacionados
 const { data: relatedArticles, error: errorRelatedArticles } = await supabase
-  .from("posts")
+  .from("articles")
   .select("title, id, tags(name), coverimage, content")
   .range(0, 2);
 

@@ -20,10 +20,12 @@ if (error || !data.length) {
 }
 
 ---
+
 <LayoutAquarium>
 
-// Mapea los datos obtenidos y muestra la información del animal
-{ data.map((animal) => (
+{ 
+  //mapeo de datos con las lista de animales 
+  data.map((animal) => (
   <div >
     <h2>{animal.common_name}</h2>
     <h3> &quot;{animal.scientific_name}&quot; </h3>

@@ -3,14 +3,18 @@ import LayoutAquarium from "../../../../layouts/LayoutAquarium.astro";
 import { supabase } from "../../../../lib/supabase";
 import '@fontsource-variable/quicksand';
 
+// Obtiene el parámetro 'id' de la URL
 const {id} = Astro.params;
 
+// Si no hay 'id', redirige a la página 404
 if (!id) {
   return Astro.redirect('/404');
 }
 
+// Consulta la base de datos 'animals' en Supabase para obtener el animal con el 'id' especificado
 const {data, error} = await supabase.from('animals').select('*').eq('id',id);
 
+// Si hay un error o no se encuentra el animal, redirige a la página 404
 if (error || !data.length) {
   return Astro.redirect('/404');
 }
@@ -18,6 +22,7 @@ if (error || !data.length) {
 ---
 <LayoutAquarium>
 
+// Mapea los datos obtenidos y muestra la información del animal
 { data.map((animal) => (
   <div >
     <h2>{animal.common_name}</h2>
@@ -52,6 +57,4 @@ if (error || !data.length) {
     height: 40%;
     object-fit: contain;
   }
-
-
 </style>

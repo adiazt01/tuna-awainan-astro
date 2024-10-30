@@ -1,11 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
+// Obtiene las cookies y la función de redirección de Astro
 const { cookies, redirect } = Astro;
 
+// Obtiene el token de acceso y el token de actualización de las cookies
 const accessToken = cookies.get("sb-access-token");
 const refreshToken = cookies.get("sb-refresh-token");
 
+// Si ambos tokens existen, redirige al usuario al dashboard
 if (accessToken && refreshToken) {
   return redirect("/dashboard");
 }

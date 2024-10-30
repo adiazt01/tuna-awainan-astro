@@ -2,32 +2,43 @@
 import Layout from "../../../../layouts/Layout.astro";
 import { supabase } from "../../../../lib/supabase";
 
+// Obtiene el parámetro 'id' de la URL
 const { id } = Astro.params;
 
+// Si no hay 'id', redirige a la página 404
 if (!id) {
   return Astro.redirect("/404");
 }
 
+// Consulta el post en la base de datos usando el 'id'
 const { data: post, error: postError } = await supabase
   .from("posts")
   .select("*")
   .eq("id", id?.toString())
   .single();
 
+// Si hay un error o no se encuentra el post, redirige a la página 404
 if (postError || !post) {
   return Astro.redirect("/404");
 }
 
+// Consulta los comentarios del post en la base de datos
 const { data: comments, error: commentsError } = await supabase
   .from("comments")
-  .select("content, created_at, user_id (username)")
+  .select("content, created_at, user_id, users(username)")
   .eq("post_id", id?.toString())
-  .order("created_at", { ascending: false });
+  .order("created_at", { ascending: false })
+  .select("content, created_at, user_id, users:username");
+
+// Muestra los comentarios en la consola para depuración
 console.log(comments);
+
+// Si hay un error al obtener los comentarios, lo muestra en la consola
 if (commentsError) {
   console.error(commentsError);
 }
 
+// Maneja el envío de un nuevo comentario
 if (Astro.request.method === "POST") {
   try {
     const { cookies, redirect } = Astro;
@@ -36,20 +47,25 @@ if (Astro.request.method === "POST") {
     const data = await Astro.request.formData();
     const content = data.get("content");
 
+    // Si no hay tokens de acceso, redirige a la página de inicio de sesión
     if (!accessToken || !refreshToken) {
       return Astro.redirect("/signin");
     }
 
+    // Si el contenido del comentario está vacío, lanza un error
     if (!content) {
       throw new Error("El contenido del comentario es requerido");
     }
 
     let session;
     try {
+      // Establece la sesión con los tokens
       session = await supabase.auth.setSession({
         refresh_token: refreshToken.value,
         access_token: accessToken.value,
       });
+
+      // Si hay un error en la sesión, borra las cookies y redirige a la página de inicio de sesión
       if (session.error) {
         Astro.cookies.delete("sb-access-token", {
           path: "/",
@@ -60,6 +76,7 @@ if (Astro.request.method === "POST") {
         return Astro.redirect("/signin");
       }
     } catch (error) {
+      // Si hay un error al establecer la sesión, borra las cookies y redirige a la página de inicio de sesión
       Astro.cookies.delete("sb-access-token", {
         path: "/",
       });
@@ -71,16 +88,20 @@ if (Astro.request.method === "POST") {
 
     const user_id = session.data.user?.id;
 
+    // Si no se encuentra el 'user_id', redirige a la página de inicio de sesión
     if (!user_id) {
       return Astro.redirect("/signin");
     }
 
+    // Consulta el perfil del usuario en la base de datos
     const {data:profile, error:errorFoundUser} = await supabase.from("users").select("*").eq("id", user_id).single();
 
+    // Si hay un error al obtener el perfil del usuario, redirige a la página de inicio de sesión
     if (errorFoundUser) {
       return Astro.redirect("/signin");
     }
 
+    // Inserta el nuevo comentario en la base de datos
     const { error } = await supabase
     .from("comments")
     .insert([
@@ -88,13 +109,15 @@ if (Astro.request.method === "POST") {
         content: content,
         user_id: profile.id,
         post_id: id
-      },
-    ])
+      }
+    ]);
 
+    // Si hay un error al guardar el comentario, lanza un error
     if (error) {
       throw new Error("No se pudo guardar el comentario");
     }
 
+    // Redirige a la misma página para mostrar el nuevo comentario
     return redirect(Astro.request.url);
   } catch (error) {
     if (error instanceof Error) {
@@ -126,14 +149,13 @@ if (Astro.request.method === "POST") {
       Comentarios
     </h3>
     <div id="comments-list" class="space-y-6">
-      {
+      {comments && 
+        // Mapea y muestra los comentarios
         comments.map((comment) => (
           <div class="bg-white p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-xl">
             <div class="flex items-start space-x-4">
               <div class="flex-shrink-0">
-                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
-                  {comment.user_id.username[0].toUpperCase()}
-                </div>
+                  {comment.users.username[0].toUpperCase()}
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-gray-800 text-sm">{comment.content}</p>
@@ -182,10 +204,7 @@ if (Astro.request.method === "POST") {
         Enviar comentario
       </button>
     </form>
-
-
   </div>
-  
 </Layout>
 
 <style>

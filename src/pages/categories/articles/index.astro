@@ -51,13 +51,13 @@ const hasPreviousPage = page > 1;
   <div class="items-center justify-center mt-5">
       <a
       href={`/categories/articles?name=${nameQueryToSearch}&page=${page - 1}`}
-      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ${!hasPreviousPage ? "pointer-events-none opacity-50" : ""}`}
+      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ml-2 ${!hasPreviousPage ? "pointer-events-none opacity-50" : ""}`}
     >
       Anterior
     </a>
     <a
       href={`/categories/articles?name=${nameQueryToSearch}&page=${page + 1}`}
-      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ${!hasNextPage ? "pointer-events-none opacity-50" : ""}`}
+      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ml-2 ${!hasNextPage ? "pointer-events-none opacity-50" : ""}`}
     >
       Siguiente
     </a>

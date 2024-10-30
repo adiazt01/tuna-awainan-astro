@@ -21,7 +21,6 @@ if (error || !data.length) {
 
 <LayoutAquarium>
 
-    <p><a href="/">Go back to the homepage</a></p>
 
     {data.map((item) => (
     <a href={`/aquarium/letter/${item.id}`} class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
@@ -37,3 +36,8 @@ if (error || !data.length) {
     </a>
     ))}
 </LayoutAquarium>
+<style>
+    a{
+        margin: 15px 30px;
+    }
+</style>

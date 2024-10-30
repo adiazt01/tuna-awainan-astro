@@ -105,6 +105,10 @@ if (Astro.request.method === "POST") {
 ---
 
 <Layout title={`Tuna Awainan: ${post.title}`}>
+  <br>
+  <a href={'/categories/articles'} class="text-white fixed bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+    Atrás 
+  </a>
   <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl mb-8">
     <img
       src={post.coverimage}
@@ -179,8 +183,9 @@ if (Astro.request.method === "POST") {
       </button>
     </form>
 
-    
+
   </div>
+  
 </Layout>
 
 <style>
@@ -197,5 +202,8 @@ if (Astro.request.method === "POST") {
 
   #comments-list > div {
     animation: fadeIn 0.5s ease-out;
+  }
+  a{
+    margin: 60px 40px; 
   }
 </style>

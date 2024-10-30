@@ -18,13 +18,23 @@ data.forEach((animal) => {
 
 const aquarium = Array.from(lettersAllowed).sort()
 ---
-<Layout>
-<section class="grid grid-cols 1">
+<Layout title="Tuna Awainan: acuario">
+  
+<section class="grid grid-cols 2">
     <div class="flex flex-row pt-8  justify-center flex-wrap gap-x-4 gap-y-4">
-            {aquarium.map((letter) => (
+            {            
+            aquarium.map((letter) => (
                 <ButtonLetter letter={letter} />
             ))}
     </div>
 </section>
 <slot/>
+
 </Layout>
+<style>
+  div{
+    background-color: #0cc0df;
+  }
+
+
+</style>

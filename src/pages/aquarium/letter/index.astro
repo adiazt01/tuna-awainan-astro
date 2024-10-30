@@ -3,25 +3,28 @@ import Layout from '../../../layouts/Layout.astro'
 import LayoutAquarium from '../../../layouts/LayoutAquarium.astro';
 import { supabase } from '../../../lib/supabase'
 
+// Obtiene los parámetros de búsqueda de la URL
 const querySearch = new URLSearchParams(Astro.url.search);
 const nameQueryToSearch = querySearch.get("selected");
 
+// Asigna el valor del parámetro de búsqueda a la variable 'name'
 const name = nameQueryToSearch || "";
 
+// Si no hay un nombre en la búsqueda, redirige al usuario a la página del acuario
 if (name === "") {
     return Astro.redirect('/aquarium')
 }
 
+// Realiza una consulta a la base de datos para obtener los animales cuyo nombre común coincida con el valor de 'name'
 const {data, error} = await supabase.from('animals').select('*').like('common_name', `%${name}%`);
 
+// Si hay un error o no se encuentran datos, redirige al usuario a la página 404
 if (error || !data.length) {
     return Astro.redirect('/404')
 }
 ---
 
 <LayoutAquarium>
-
-
     {data.map((item) => (
     <a href={`/aquarium/letter/${item.id}`} class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
         <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src={item.image} alt="">
@@ -36,6 +39,7 @@ if (error || !data.length) {
     </a>
     ))}
 </LayoutAquarium>
+
 <style>
     a{
         margin: 15px 30px;

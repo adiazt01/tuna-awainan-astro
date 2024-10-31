@@ -1,0 +1,55 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import BackButton from "../../../components/BackButton.astro";
+import ForumCard from "../../../components/ForumCard.astro";
+import { supabase } from "../../../lib/supabase";
+
+//consultamos los foros
+const { data: foros, error: errorForo } = await supabase
+  .from("forums")
+  .select("*")
+
+console.log(foros)
+console.log(errorForo)
+
+---
+
+<Layout title="Tuna Awainan: Foro">
+
+  <div class="p-1">
+    <div>
+      <BackButton page="/comunity"/>
+    </div>
+
+    <div class=" w-11/12">
+      {
+        foros?
+        foros?.map((foro)=>(
+            <ForumCard id={foro.id} title={foro.title} content={foro.content} />
+          )) :
+        <h2>No hay foros publicados hasta los momentos.</h2>
+      }
+    </div>
+  </div>
+    
+
+</Layout>
+
+<style>
+
+  a{
+      margin: 60px 20px; 
+    }
+
+  .p-1{
+    width: 80%;
+    height: 100%;
+    display:grid;
+    grid-template-columns: 120px 90%;
+    grid-template-rows: 600px;
+  }
+  h2{
+    margin: 20px 30px; 
+  }
+
+</style>

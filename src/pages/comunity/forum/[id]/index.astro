@@ -1,0 +1,50 @@
+---
+import { supabase } from "../../../../lib/supabase";
+import Layout from "../../../../layouts/Layout.astro";
+import BackButton from "../../../../components/BackButton.astro";
+const { id } = Astro.params
+
+if(!id){
+  return Astro.redirect('/404')
+}
+
+const { data: foro, error: errorForo } = await supabase
+  .from("forums")
+  .select("*")
+  .eq('id',id)
+console.log(foro)
+console.log(errorForo)
+
+
+---
+
+<Layout title={"Foro: "} >
+  <div class="content">
+    <BackButton page="/comunity/forum"/>
+    <div></div>
+    <div>
+      <h2>{foro[0].title}</h2>
+      <p>{foro[0].content}</p>
+    </div>
+  </div>
+    
+</Layout>
+
+<style>
+  .content{
+    width: 100%;
+    height:800px;
+    display: grid;
+    grid-template-columns: 120px 90%;
+  }
+
+  h2{
+    font-size:48px
+    
+  }
+  p{
+    padding:10px 40px
+  }
+
+</style>
+

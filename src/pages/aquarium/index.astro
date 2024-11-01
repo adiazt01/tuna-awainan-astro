@@ -1,11 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro"
 import LayoutAquarium from "../../layouts/LayoutAquarium.astro"
+import '@fontsource-variable/quicksand';
 ---
 <LayoutAquarium>
     <div>
-        <h2></h2>  
-        <p></p>
+        <h2>¿Ya viste el Acuario?</h2>  
+        <p>&emsp;&emsp;"Un pedacito de Venezuela en tu salón. Descubre la increíble biodiversidad de la cuenca del Orinoco a través de nuestro acuario. Cada pez cuenta una historia sobre la importancia de preservar nuestros ecosistemas. ¡Acompáñanos en este viaje educativo y contribuye a la conservación de esta joya natural!"</p>
     </div>
 </LayoutAquarium>
 
@@ -14,8 +15,17 @@ import LayoutAquarium from "../../layouts/LayoutAquarium.astro"
         width: 600px;
         height: 600px;
         margin: 80px auto;
-        background-color: #aca9a9;
         text-align: center;
         border-radius: 50px;
+    }
+    h2{
+        font-size: 48px;
+        color: #0cc0df;
+        font-family: 'Quicksand Variable', sans-serif;
+    }
+    p{
+        text-align: justify;
+        padding: 30px 90px;
+        font-size: 18px;
     }
 </style>

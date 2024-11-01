@@ -13,16 +13,15 @@ const nameQueryToSearch = querySearch.get("name");
 //consultar las imagense 
 const {data:images, error: errorTotalArticles} = await supabase
 	.from("articles")
-	.select('coverimage')
+	.select("coverimage, id")
 
 console.log(images)
-
 const bubbles = []
 
 if (images) {
 	for(let i = 0; i < 10; i++){
 		bubbles.push(
-			{style: 'bubble x'+(i+1),img: images[i]?.coverimage}
+			{style: 'bubble x'+(i+1),img: images[i]?.coverimage,id:images[i].id}
 		)
 	}
 } else {
@@ -40,7 +39,7 @@ console.log(bubbles)
 				SU GOTA<br />
 				DE AGUA
 			</h1>
-			<h3 class="text-white text-4xl font-semibold">Y tú ¿Qué esperas?</h3>
+			<h3 class="text-white text-4xl font-semibold">Y tú, ¿Qué esperas?</h3>
 			<Button> Saber más </Button>
 		</div>
 
@@ -48,8 +47,11 @@ console.log(bubbles)
 			
 			  {	
 				bubbles.map((bubble) =>(
-					<div class={bubble.style} 
-					style={"background-image: url("+bubble.img+"); background-repeat: no-repeat; background-size: cover; background-position: top ;"}></div>
+					<a href= {"/categories/articles/"+ bubble.id+""}> 
+						<div class={bubble.style}
+						 
+					style={"background-image: url("+bubble.img+");   background-repeat: no-repeat; background-size: cover; background-position: top ;"}></div>
+					 </a>
 				))
 			}
 		</div>

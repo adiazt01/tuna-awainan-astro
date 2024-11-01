@@ -1,24 +1,39 @@
 ---
+import CommentItem from "../../../../components/CommentItem.astro";
 import Layout from "../../../../layouts/Layout.astro";
 import { supabase } from "../../../../lib/supabase";
 
-const {id } = Astro.params
+const { id } = Astro.params;
 
 if (!id) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
 const { data: blog, error: errorBlog } = await supabase
   .from("blogs")
-  .select(`*, user_id (
+  .select(
+    `*, user_id (
      username
-      ))`)
-  .eq("id", id)
+      ))`
+  )
+  .eq("id", id);
 
-console.log(blog)
+const { data: comments, error: errorComments } = await supabase
+  .from("blogs_comments")
+  .select(
+    `*, user_id (
+     username
+      )`
+  )
+  .eq("blog_id", id)
+  .order("created_at", { ascending: false });
+
+console.log(comments);
+
+console.log(blog);
 
 if (errorBlog) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
 // Maneja el envío de un nuevo comentario
@@ -28,7 +43,7 @@ if (Astro.request.method === "POST") {
     const accessToken = cookies.get("sb-access-token");
     const refreshToken = cookies.get("sb-refresh-token");
     const data = await Astro.request.formData();
-    
+
     const content = data.get("content");
 
     // Si no hay tokens de acceso, redirige a la página de inicio de sesión
@@ -78,7 +93,11 @@ if (Astro.request.method === "POST") {
     }
 
     // Consulta el perfil del usuario en la base de datos
-    const {data:profile, error:errorFoundUser} = await supabase.from("users").select("*").eq("id", user_id).single();
+    const { data: profile, error: errorFoundUser } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", user_id)
+      .single();
 
     // Si hay un error al obtener el perfil del usuario, redirige a la página de inicio de sesión
     if (errorFoundUser) {
@@ -86,18 +105,17 @@ if (Astro.request.method === "POST") {
     }
 
     // Inserta el nuevo comentario en la base de datos
-    const { error } = await supabase
-    .from("comments")
-    .insert([
+    const { error } = await supabase.from("blogs_comments").insert([
       {
         content: content,
         user_id: profile.id,
-        article_id: id
-      }
+        blog_id: id,
+      },
     ]);
 
     // Si hay un error al guardar el comentario, lanza un error
     if (error) {
+      console.log(error);
       throw new Error("No se pudo guardar el comentario");
     }
 
@@ -111,26 +129,65 @@ if (Astro.request.method === "POST") {
 }
 ---
 
-<Layout>
-    <section class="grid p-8 grid-cols-1 w-full max-w-screen-xl">
-        
+<Layout title={`Post: ${blog[0]?.title}`}>
+  <section class="grid p-8 grid-cols-1 w-full mx-auto max-w-screen-xl">
     <div class="flex flex-col w-full">
-    
-    <div class="flex flex-row items-center gap-4">
-        <div class="relative inline-flex items-center justify-center size-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-            <span class="font-medium text-gray-600 dark:text-gray-300">JL</span>
+      <div class="flex flex-row items-center gap-4">
+        <div
+          class="relative inline-flex items-center justify-center size-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600"
+        >
+          <span class="font-medium text-gray-600 dark:text-gray-300">JL</span>
         </div>
         <p class="text-sm font-medium text-gray-600 dark:text-gray-300">
-            {blog[0].user_id.username.toUpperCase()}
+          {blog[0]?.user_id?.username.toUpperCase()}
         </p>
-    </div>
+      </div>
 
-    <h5 class="mb-2 text-xl mt-4  font-bold tracking-tight text-gray-900 dark:text-white">
-        {blog[0].title}
-    </h5>
-    <p class="font-normal text-gray-700 dark:text-gray-400">
-        {blog[0].content}
-    </p>
+      <h5
+        class="mb-2 text-xl mt-4 font-bold tracking-tight text-gray-900 dark:text-white"
+      >
+        {blog[0]?.title}
+      </h5>
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        {blog[0]?.content}
+      </p>
+    </div>
+    <section class="bg-white dark:bg-gray-900 py-8 antialiased">
+      <div class="mx-auto px-4">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
+            Comentarios
+          </h2>
+        </div>
+        <form class="mb-6 flex flex-col" method="POST">
+          <div
+            class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+          >
+            <label for="comment" class="sr-only">Tu comentario</label>
+            <textarea
+              id="comment"
+              name="content"
+              rows="6"
+              class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+              placeholder="Escribe tu comentario"
+              required></textarea>
+          </div>
+          <button
+            type="submit"
+            class="inline-flex items-center bg-[#0cc0df] ml-auto py-2.5 px-4 text-xs font-medium text-center text-white bg-[p] rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+          >
+            Post comment
+          </button>
+        </form>
+        <div class="grid grid-cols-1 gap-2">
+        {
+          comments?.map((comment) => (
+            <CommentItem user_id={comment.user_id} created_at={comment.created_at} content={comment.content} />
+          ))
+        }
+          </div>
+      </div>
     </section>
-  </div>
+  </section>
+
 </Layout>

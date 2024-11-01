@@ -3,6 +3,7 @@ import { convertCompilerOptionsFromJson } from "typescript";
 import Layout from "../../../layouts/Layout.astro";
 import { supabase } from "../../../lib/supabase";
 import BackButton from "../../../components/BackButton.astro";
+import { getProfileSession } from "../../../utils/auth";
 
 const querySearch = new URLSearchParams(Astro.url.search);
 
@@ -13,49 +14,85 @@ const to = from + articlesPerPage - 1; // Índice de fin
 
 //consultamos los pots
 const { data: totalArticles, error: errorTotalArticles } = await supabase
-.from('blogs')
-  .select(`*, user_id (
+  .from("blogs")
+  .select(
+    `*, user_id (
      username
-      ))`)
-  .range(from, to);
+      ))`
+  )
+
 
 if (errorTotalArticles) {
-  return Astro.redirect('/404')
+  return Astro.redirect("/404");
 }
 
+const { session, profile } = await getProfileSession(Astro);
 ---
+
 <Layout title="Tuna-Awainan: comunidad">
-    <div class="container mx-auto px-4">
-        <h1 class="text-3xl font-bold text-center my-4">Foro de la comunidad</h1>
-        <ul class="grid grid-cols-1 max-w-screen-xl mx-auto md:grid-cols-2 lg:grid-cols-3 gap-4">
-         {totalArticles.map((article) => (
-         <article class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-             <a href={`/comunity/posters/${article.id}`} class="block">
-                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        {article.title} 
-                </h5>
-             </a>
-             <header class="flex flex-row items-center w-full gap-2">
-                <div >
-                    <a href={`/comunity/posters/${article.id}`} class="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                        {article.user_id.username}
-                    </a>
-                    <p class="text-xs text-gray-600 dark:text-gray-300">
-                        {new Date(article.created_at).toLocaleDateString()}
-                    </p>
-                </div>
-             </header>
-             <div class="flex flex-row w-full items-end justify-end">
-             <a href={`/comunity/posters/${article.id}`} class="inline-flex mt-4 ml-auto px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                 Read more
-                 <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                 </svg>
-             </a>
-             </div>
-         
-         </article>
-            ))}
-        </ul>
-    </div>
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl font-bold text-center my-4">Foro de la comunidad</h1>
+    {
+      session !== null  && profile[0]?.role === "publisher" && (
+        <a href="/comunity/posters/new" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Crear nuevo artículo
+          <svg class="rtl:rotate w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+            </svg>
+        </a>
+      )
+    }
+
+    <ul
+      class="grid grid-cols-1 max-w-screen-xl mx-auto md:grid-cols-2 lg:grid-cols-3 gap-4"
+    >
+      {
+        totalArticles.map((article) => (
+          <article class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <a href={`/comunity/posters/${article.id}`} class="block">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {article.title}
+              </h5>
+            </a>
+            <header class="flex flex-row items-center w-full gap-2">
+              <div>
+                <a
+                  href={`/comunity/posters/${article.id}`}
+                  class="text-sm font-semibold text-gray-700 dark:text-gray-200"
+                >
+                  {article.user_id.username}
+                </a>
+                <p class="text-xs text-gray-600 dark:text-gray-300">
+                  {new Date(article.created_at).toLocaleDateString()}
+                </p>
+              </div>
+            </header>
+            <div class="flex flex-row w-full items-end justify-end">
+              <a
+                href={`/comunity/posters/${article.id}`}
+                class="inline-flex mt-4 ml-auto px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Read more
+                <svg
+                  class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  />
+                </svg>
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </ul>
+  </div>
 </Layout>

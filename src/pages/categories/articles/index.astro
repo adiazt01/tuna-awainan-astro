@@ -19,7 +19,7 @@ const to = from + articlesPerPage - 1; // Índice de fin
 // Obtener la cantidad total de artículos
 const { count: totalArticles, error: errorTotalArticles } = await supabase
   .from("articles")
-  .select("title, id, tags!inner(*) , coverimage, content", { count: "exact" })
+  .select("title, id,  tags!inner(*) , coverimage, content", { count: "exact" })
   .ilike("tags.name",`%${nameQueryToSearch}%`)
 
   
@@ -27,7 +27,7 @@ console.log(totalArticles)
 // Obtener los artículos para la página actual
 const { data: articles, error: errorArticles } = await supabase
   .from("articles")
-  .select("title, id, tags!inner(*), coverimage, content")
+  .select("title, id,  tags!inner(*), coverimage, content")
   .ilike("tags.name", `%${nameQueryToSearch}%`)
   .range(from, to)
 
@@ -38,8 +38,8 @@ const { data: categories, error: errorCategories } = await supabase
   .range(0, 3);
 
 const { data: relatedArticles, error: errorRelatedArticles } = await supabase
-  .from("posts")
-  .select("title, id, tags(name), coverimage, content")
+  .from("articles")
+  .select("title, id, tags!inner(*), coverimage, content")
   .range(0, 2);
 
 // Redirigir a la página 404 si hay errores o no hay artículos

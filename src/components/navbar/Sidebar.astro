@@ -18,8 +18,18 @@ const LINKS = [
         link: 'http://localhost:4321/categories'
     }, 
     {
-        label:'Comunidad',
-        link:'http://localhost:4321/comunity'
+        label: 'Comunidad',
+        
+        sublinks: [
+            {
+                label: 'Foro',
+                link: 'http://localhost:4321/comunity/forum'
+            },
+            {
+                label: 'Artículos',
+                link: 'http://localhost:4321/comunity/events'
+            }
+        ]
     },
     {
         label: 'Sobre Nosotros',
@@ -70,23 +80,20 @@ if (accessToken && refreshToken) {
         <h1>Tuna <br/><span>Awainan</span></h1>
     </div>
     <div class="w-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-       <ul class="space-y-2 font-medium w-full">
-          {LINKS.map((link) => (
-              <SidebarItem link={link.link} label={link.label} />
-          ))}
-          {userId && (<form class="w-full space-y-2" action="/api/auth/signout">
-            <button class="flex w-full items-center px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100 hover:text-gray-900" type="submit">
-                <span class="ms-3">
-                Cerrar sesión
-                </span>
-            </button>
-          </form>)}
-          {!userId && <a href="/signin" class="flex space-y-2 items-center px-3 py-2 text-lg font-medium rounded-md text-gray-600 hover:bg-gray-100 hover:text-gray-900">
-          <span class="ms-3">
-            Iniciar sesión
-          </span>
-          </a>}
-       </ul>
+        <ul class="space-y-2 font-medium">
+            {LINKS.map((link, index) => (
+                <li>
+                    <SidebarItem id="sidebar" link={link.link} label={link.label} onClick={() => toggleSidebar()} />
+                    {link.sublinks && (
+                        <ul id={`sublinks-${index}`} class="pl-4 space-y-2 ">
+                            {link.sublinks.map((sublink) => (
+                                <SidebarItem link={sublink.link} label={sublink.label} />
+                            ))}
+                        </ul>
+                    )}
+                </li>
+            ))}
+        </ul>
     </div>
  </aside>
  

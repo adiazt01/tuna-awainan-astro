@@ -14,15 +14,8 @@ const from = (page - 1) * articlesPerPage; // Índice de inicio
 const to = from + articlesPerPage - 1; // Índice de fin
 
 // // Filtrar los artículos por categoría
-// const { data: filteredArticles, error: errorFilteredArticles } = await supabase
-//   .from("posts")
-//   .select("title, id, tags(name), coverimage, content")
-//   .like("tags.name", `%${nameQueryToSearch}%`)
-//   .range(from, to);
 
-// if (errorFilteredArticles) {
-//   return Astro.redirect("/404");
-// }
+
 // Obtener la cantidad total de artículos
 const { count: totalArticles, error: errorTotalArticles } = await supabase
   .from("articles")
@@ -74,14 +67,14 @@ const hasPreviousPage = page > 1;
     <!-- Botón para la página anterior -->
     <a
       href={`/categories/articles?name=${nameQueryToSearch}&page=${page - 1}`}
-      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ${!hasPreviousPage ? "pointer-events-none opacity-50" : ""}`}
+      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ml-2 ${!hasPreviousPage ? "pointer-events-none opacity-50" : ""}`}
     >
       Anterior
     </a>
     <!-- Botón para la página siguiente -->
     <a
       href={`/categories/articles?name=${nameQueryToSearch}&page=${page + 1}`}
-      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ${!hasNextPage ? "pointer-events-none opacity-50" : ""}`}
+      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ml-2 ${!hasNextPage ? "pointer-events-none opacity-50" : ""}`}
     >
       Siguiente
     </a>

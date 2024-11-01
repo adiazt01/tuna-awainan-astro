@@ -30,8 +30,8 @@ const { session, profile } = await getProfileSession(Astro);
 ---
 
 <Layout title="Tuna-Awainan: comunidad">
-  <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold text-center my-4">Foro de la comunidad</h1>
+  <div class="container mx-auto px-4 font" >
+    <h1 class="text-5xl font-bold text-center my-4">Comunidad</h1>
     {
       session !== null  && profile[0]?.role === "publisher" && (
         <a href="/comunity/posters/new" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -44,7 +44,7 @@ const { session, profile } = await getProfileSession(Astro);
     }
 
     <ul
-      class="grid grid-cols-1 max-w-screen-xl mx-auto md:grid-cols-2 lg:grid-cols-3 gap-4"
+      class="grid grid-cols-1 max-w-screen-xl mx-auto md:grid-cols-2 lg:grid-cols-3 gap-4 pb-12"
     >
       {
         totalArticles.map((article) => (
@@ -70,9 +70,10 @@ const { session, profile } = await getProfileSession(Astro);
             <div class="flex flex-row w-full items-end justify-end">
               <a
                 href={`/comunity/posters/${article.id}`}
-                class="inline-flex mt-4 ml-auto px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="inline-flex mt-4 ml-auto px-3 py-2 text-sm font-medium text-center text-white  rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                style="background-color: #0cc0df"
               >
-                Read more
+                Leer más
                 <svg
                   class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
                   aria-hidden="true"
@@ -96,3 +97,14 @@ const { session, profile } = await getProfileSession(Astro);
     </ul>
   </div>
 </Layout>
+
+<style>
+
+  .font{
+
+    font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
+  
+
+  }
+
+</style>

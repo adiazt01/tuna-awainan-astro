@@ -25,8 +25,6 @@ if (error || !data.length) {
 ---
 
 <LayoutAquarium>
-    <img class="map" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fproyectoviajero.com%2Fwp-content%2Fuploads%2F2023%2F08%2Fmapa_cuenca_orinoco-XL.webp&f=1&nofb=1&ipt=fe70be99a31cabb9a03c132a0eebb5e27b7e59f65759377f98bdd0618ca540e1&ipo=images" alt="">
-
     {data.map((item) => (
     <a href={`/aquarium/letter/${item.id}`} class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
         <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src={item.image} alt="">
@@ -50,11 +48,5 @@ if (error || !data.length) {
     span{
         font-style: italic;
         color: darkgray;
-    }
-    .map{
-        display: grid;
-        width: 650px;
-        float: right;
-        margin: 20px;
     }
 </style>

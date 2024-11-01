@@ -32,18 +32,18 @@ console.log(bubbles)
 ---
 
 <Layout title="Tuna Awainan">
-	<div class="grid grid-cols-2 xl:grid-cols-2">
+	<div class="grid grid-cols-2 xl:grid-cols-2 font">
 		<div class="flex flex-col gap-4 items-center justify-center h-screen bg-[#0cc0df]">
 			<h1 class="text-7xl leading-tight text-center text-white font-extrabold dark:text-white">
 				OTROS YA<br /> PUSIERON <br />
 				SU GOTA<br />
 				DE AGUA
 			</h1>
-			<h3 class="text-white text-4xl font-semibold">Y tú, ¿Qué esperas?</h3>
+			<h3 class="text-white text-4xl font-semibold">Y tú, ¿qué esperas?</h3>
 			<Button> Saber más </Button>
 		</div>
 
-		<div class="relative overflow-hidden fondo">
+		<div class="relative overflow-hidden">
 			
 			  {	
 				bubbles.map((bubble) =>(
@@ -131,6 +131,10 @@ console.log(bubbles)
 		100% { 
 				margin-left:50px;
 		}
+}
+
+.font{
+	font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
 }
 
 /* Estilos específicos para cada burbuja */
@@ -308,10 +312,5 @@ console.log(bubbles)
 	width: 180px;
 }
 
-.fondo{
-	background: url('../assets/images/salto_angel2.gif') top / cover no-repeat;
-	width: 100%;
-	height: 100%;
-	
-}
+
 </style>

@@ -22,6 +22,7 @@ console.log(errorForo)
       {
         foros?(<>
         <h2>Foros publicados: {foros.length}</h2>
+        <h1 class="text-5xl font-bold text-center -mt-4">Foro</h1>
         {foros?.map((foro)=>(
             <ForumCard id={foro.id} title={foro.title} content={foro.content} />
           ))} </>
@@ -50,6 +51,9 @@ console.log(errorForo)
   }
   h2{
     margin: 20px 30px; 
+  }
+  h1{
+    font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
   }
 
 </style>

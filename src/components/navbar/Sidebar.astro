@@ -1,6 +1,6 @@
 ---
 import SidebarItem from "./SidebarItem.astro"
-// Supports weights 300-700
+import "./script.js";
 import '@fontsource-variable/quicksand';
 
 const LINKS = [
@@ -17,23 +17,51 @@ const LINKS = [
         link: 'http://localhost:4321/categories'
     }, 
     {
-        label:'Comunidad',
-        link:'http://localhost:4321/comunity'
+        label: 'Comunidad',
+        
+        sublinks: [
+            {
+                label: 'Foro',
+                link: 'http://localhost:4321/comunity/forum'
+            },
+            {
+                label: 'Artículos',
+                link: 'http://localhost:4321/comunity/events'
+            }
+        ]
     },
-
     {
         label: 'Sobre Nosotros',
         link: 'http://localhost:4321/about'  
     },
     {
-        label:'Inicio de Sesión',
-        link:'/signin'
+        label: 'Inicio de Sesión',
+        link: '/signin'
     },
     {
-        label:'NewArticle',
-        link:'/NewArticle'
+        label: 'NewArticle',
+        link: '/NewArticle'
     }
 ]
+
+// function toggleSublinks(index: number) {
+//     const sublinks = document.getElementById(`sublinks-${index}`);
+//     if (sublinks) {
+//         sublinks.classList.toggle('hidden');
+//     }
+//     // Ensure all other sublinks are hidden
+//     LINKS.forEach((_, i) => {
+//         if (i !== index) {
+//             const otherSublinks = document.getElementById(`sublinks-${i}`);
+//             if (otherSublinks) {
+//                 otherSublinks.classList.add('hidden');
+//                 console.log(`Hiding sublinks for index ${i}`);
+//             }
+//         }
+//     });
+//     console.log(`Toggled sublinks for index ${index}`);
+// }
+
 ---
 
 <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-gray-50 flex flex-col justify-center items-center -translate-x-full sm:translate-x-0" aria-label="Sidebar">
@@ -41,11 +69,20 @@ const LINKS = [
         <h1>Tuna <br/><span>Awainan</span></h1>
     </div>
     <div class="w-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-       <ul class="space-y-2 font-medium">
-          {LINKS.map((link) => (
-              <SidebarItem link={link.link} label={link.label} />
-          ))}
-       </ul>
+        <ul class="space-y-2 font-medium">
+            {LINKS.map((link, index) => (
+                <li>
+                    <SidebarItem id="sidebar" link={link.link} label={link.label} onClick={() => toggleSidebar()} />
+                    {link.sublinks && (
+                        <ul id={`sublinks-${index}`} class="pl-4 space-y-2 ">
+                            {link.sublinks.map((sublink) => (
+                                <SidebarItem link={sublink.link} label={sublink.label} />
+                            ))}
+                        </ul>
+                    )}
+                </li>
+            ))}
+        </ul>
     </div>
  </aside>
  

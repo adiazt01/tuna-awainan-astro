@@ -1,8 +1,11 @@
 ---
 interface Props {
-    link: string;
+    link?: string;
     label: string;
+    onClick?: () => void;
+    id?: string;
 }
+
 
 const {link, label} = Astro.props
 

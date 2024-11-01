@@ -5,13 +5,16 @@ import qs from "query-string";
 const { image, name, index } = Astro.props;
 
 const query = qs.stringifyUrl(
-    {
-        url: "/categories/articles",
-        query: {name: name}
+  {
+    url:'/categories/articles',
+    query:{
+      name:name
     }
-);
+  }
+)
 
-console.log(query);
+
+
 ---
 
 

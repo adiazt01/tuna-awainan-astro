@@ -32,34 +32,9 @@ const DATA_CATEGORIES_MOCK = [
     <section class="grid grid-cols-1">
       {
         // Mapeo de los datos de categorías para crear componentes CardCategory
-        DATA_CATEGORIES_MOCK.map((data, index) => (
-          <CardCategory  name={data.name} color={index} image={data.image} />
+        DATA_CATEGORIES_MOCK.map((data) => (
+          <CardCategory  name={data.name} image={data.image} />
         ))
       }
     </section>
   </Layout>
-
-<style>
-
-</style>
-
-<script>
-    // Selección del contenedor de elementos del diccionario
-    const wrapper = document.getElementById("wrapper-elements-dictionary");
-
-    // Selección de todos los botones
-    const buttons = document.querySelectorAll("button.");
-
-    // Añadir evento de clic a cada botón
-    buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-            // Eliminar el contenedor actual
-            wrapper?.remove();
-
-            // Crear un nuevo contenedor
-            const newWrapper = document.createElement("ul");
-            newWrapper.id = "wrapper-elements-dictionary";
-        
-        });
-    });
-</script>

@@ -14,7 +14,7 @@ console.log(errorForo)
 
 ---
 
-<Layout title="Tuna Awainan: Foro">
+<Layout title="Tuna Awainan | Foro">
 
   <div class="p-1">
     <div>
@@ -23,11 +23,14 @@ console.log(errorForo)
 
     <div class=" w-11/12">
       {
-        foros?
-        foros?.map((foro)=>(
+        foros?(<>
+        <h2>Foros publicados: {foros.length}</h2>
+        {foros?.map((foro)=>(
             <ForumCard id={foro.id} title={foro.title} content={foro.content} />
-          )) :
+          ))} </>
+        ): (
         <h2>No hay foros publicados hasta los momentos.</h2>
+        )
       }
     </div>
   </div>

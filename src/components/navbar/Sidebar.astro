@@ -1,6 +1,7 @@
 ---
 import SidebarItem from "./SidebarItem.astro"
-import "./script.js";
+import { supabase } from "../../lib/supabase";
+// Supports weights 300-700
 import '@fontsource-variable/quicksand';
 
 const LINKS = [
@@ -34,37 +35,47 @@ const LINKS = [
         label: 'Sobre Nosotros',
         link: 'http://localhost:4321/about'  
     },
-    {
-        label: 'Inicio de Sesión',
-        link: '/signin'
-    },
-    {
-        label: 'NewArticle',
-        link: '/NewArticle'
-    }
 ]
 
-// function toggleSublinks(index: number) {
-//     const sublinks = document.getElementById(`sublinks-${index}`);
-//     if (sublinks) {
-//         sublinks.classList.toggle('hidden');
-//     }
-//     // Ensure all other sublinks are hidden
-//     LINKS.forEach((_, i) => {
-//         if (i !== index) {
-//             const otherSublinks = document.getElementById(`sublinks-${i}`);
-//             if (otherSublinks) {
-//                 otherSublinks.classList.add('hidden');
-//                 console.log(`Hiding sublinks for index ${i}`);
-//             }
-//         }
-//     });
-//     console.log(`Toggled sublinks for index ${index}`);
-// }
+const {cookies} = Astro;
+const accessToken = cookies.get("sb-access-token");
+const refreshToken = cookies.get("sb-refresh-token");
+let userId;
+if (accessToken && refreshToken) {
+  let session = await supabase.auth.setSession({
+    refresh_token: refreshToken.value,
+    access_token: accessToken.value,
+  });
 
+  try {
+    if (session.error) {
+      Astro.cookies.delete("sb-access-token", {
+        path: "/",
+      });
+      Astro.cookies.delete("sb-refresh-token", {
+        path: "/",
+      });
+      return Astro.redirect("/signin");
+    } 
+  } catch (error) {
+  // Si hay un error al establecer la sesión, borra las cookies y redirige a la página de inicio de sesión
+  Astro.cookies.delete("sb-access-token", {
+    path: "/",
+  });
+  Astro.cookies.delete("sb-refresh-token", {
+    path: "/",
+  });
+  return Astro.redirect("/signin");
+  }
+  userId = session.data.user?.id;
+}
 ---
 
 <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-gray-50 flex flex-col justify-center items-center -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+    
+    <img src="/src/assets/images/TUNA-awainan.png"
+    style="height: 20%;">
+    
     <div class="text-left">
         <h1>Tuna <br/><span>Awainan</span></h1>
     </div>
@@ -92,9 +103,4 @@ const LINKS = [
         font-size: 48px;
         font-weight: 700;
     }
-    span{
-        font-weight: 200;
-        color:#0cc0df
-    }
 </style>
- 

@@ -2,49 +2,249 @@
 import { supabase } from "../../../../lib/supabase";
 import Layout from "../../../../layouts/Layout.astro";
 import BackButton from "../../../../components/BackButton.astro";
-const { id } = Astro.params
+
+const { id } = Astro.params;
 
 if(!id){
-  return Astro.redirect('/404')
+  return Astro.redirect('/404');
 }
 
 const { data: foro, error: errorForo } = await supabase
   .from("forums")
   .select("*")
-  .eq('id',id)
-console.log(foro)
-console.log(errorForo)
-
+  .eq('id', id);
 
 ---
 
-<Layout title={"Foro: "} >
-  <div class="content">
-    <BackButton page="/comunity/forum"/>
-    <div></div>
-    <div>
-      <h2>{foro[0].title}</h2>
-      <p>{foro[0].content}</p>
+<Layout title={`${foro[0].title} | Tuna Awainan`}>
+  <div class="container font-custom">
+    
+    <!--bton de regresar -->
+    <div class="buttons-container">
+      <BackButton page="/comunity/forum" />
+    </div>
+
+    <!-- contenedor del contenido del foro -->
+    <div class="content-container">
+      <div class="forum-content">
+        <h2 class="forum-title">{foro[0].title}</h2>
+        <div class="post-info">
+          <span class="author">Autor: {foro[0].author || "Anónimo"}</span>
+          <span class="date">{foro[0].date || "Fecha desconocida"}</span>
+        </div>
+        <p class="forum-text">{foro[0].content}</p>
+      </div>
+
+      <!-- section de comentarios -->
+      <div class="comments-section">
+        <h3>Comentarios</h3>
+        
+        <!-- la ide es hacer un while  -->
+        <div class="comment">
+          <div class="comment-author">Usuario1</div>
+          <div class="comment-date">2024-10-31</div>
+          <p class="comment-text">Este es un comentario de ejemplo sobre el tema del foro.</p>
+        </div>
+        <!--un while en este bloque -->
+        <div class="comment">
+          <div class="comment-author">Usuario2</div>
+          <div class="comment-date">2024-10-30</div>
+          <p class="comment-text">¡Muy interesante el tema! Gracias por compartir.</p>
+        </div>
+        
+      </div>
+
+      <!-- from de comentario -->
+      <div class="comment-form">
+        <h3>Deja un comentario</h3>
+        <textarea placeholder="Escribe tu comentario aquí..." class="comment-input"></textarea>
+        <button class="submit-btn">Enviar</button>
+      </div>
     </div>
   </div>
-    
 </Layout>
 
 <style>
-  .content{
+  :root {
+    --bg-color: #f8f9fa;
+    --text-color: #333;
+    --secondary-text-color: #666;
+    --border-color: #e5e7eb;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+    --btn-color: #0cc0df;
+  }
+
+  .font-custom {
+    font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
+  }
+
+  /* contenedor principal */
+  .container {
+    position: relative;
     width: 100%;
-    height:800px;
-    display: grid;
-    grid-template-columns: 120px 90%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
   }
 
-  h2{
-    font-size:48px
-    
-  }
-  p{
-    padding:10px 40px
+  /* bottones */
+  .buttons-container {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
   }
 
+  .reply-btn {
+    background-color: var(--btn-color);
+    color: white;
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .reply-btn:hover {
+    background-color: #0aa4bc;
+  }
+
+  /* continer  del foro */
+  .content-container {
+    margin-top: 30px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .forum-content {
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px var(--shadow-color);
+    margin-top: 10px;
+  }
+
+  .forum-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 10px;
+  }
+
+  .post-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: var(--secondary-text-color);
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .author, .date {
+    font-style: italic;
+  }
+
+  .forum-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+  }
+
+  /* section de comentarios */
+  .comments-section {
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px var(--shadow-color);
+  }
+
+  .comments-section h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 15px;
+  }
+
+  .comment {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .comment:last-child {
+    border-bottom: none;
+  }
+
+  .comment-author {
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .comment-date {
+    font-size: 0.875rem;
+    color: var(--secondary-text-color);
+    margin-bottom: 5px;
+  }
+
+  .comment-text {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-top: 5px;
+  }
+
+  /* form de comentario */
+  .comment-form {
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .comment-form h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-color);
+  }
+
+  .comment-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    resize: vertical;
+  }
+
+  .submit-btn {
+    align-self: flex-end;
+    background-color: var(--btn-color);
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .submit-btn:hover {
+    background-color: #0aa4bc;
+  }
 </style>
-

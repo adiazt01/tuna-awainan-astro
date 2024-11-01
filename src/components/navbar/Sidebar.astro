@@ -17,24 +17,24 @@ const LINKS = [
         label: 'Artículos del agua',
         link: 'http://localhost:4321/categories'
     }, 
+
     {
-        label: 'Comunidad',
-        
-        sublinks: [
-            {
-                label: 'Foro',
-                link: 'http://localhost:4321/comunity/forum'
-            },
-            {
-                label: 'Posts',
-                link: 'http://localhost:4321/comunity/events'
-            }
-        ]
+        label: 'Foro',
+        link: 'http://localhost:4321/comunity/forum'
     },
     {
-        label: 'Sobre Nosotros',
+        label: 'Posts',
+        link: 'http://localhost:4321/comunity/posters'
+    },
+
+    {      
+        label: 'Nuestro equipo ',
         link: 'http://localhost:4321/about'  
     },
+    {
+        label: 'Cuenta',
+        link: 'http://localhost:4321/signin'
+    }
 ]
 
 const {cookies} = Astro;
@@ -84,13 +84,7 @@ if (accessToken && refreshToken) {
             {LINKS.map((link, index) => (
                 <li>
                     <SidebarItem id="sidebar" link={link.link} label={link.label} onClick={() => toggleSidebar()} />
-                    {link.sublinks && (
-                        <ul id={`sublinks-${index}`} class="pl-4 space-y-2 ">
-                            {link.sublinks.map((sublink) => (
-                                <SidebarItem link={sublink.link} label={sublink.label} />
-                            ))}
-                        </ul>
-                    )}
+                   
                 </li>
             ))}
         </ul>

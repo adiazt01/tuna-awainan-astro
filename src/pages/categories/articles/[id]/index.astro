@@ -159,40 +159,6 @@ if (Astro.request.method === "POST") {
                     placeholder="Escribe tu comentario" required></textarea>
             </div>
 
-            <div class="mapa">
-
-              
-    <gmp-map
-    center="8.29776017217297, -62.71135365746352"
-    zoom="10"
-    map-id="DEMO_MAP_ID"
-    style="height: 400px"
-
-   
-  >
-    <gmp-advanced-marker
-      position="8.29776017217300,  -62.71135365746355"
-      title="UCAB"
-
-    ></gmp-advanced-marker>
-    <gmp-advanced-marker
-      position="8.308647544300484, -62.69788503384105"
-      title="Rio caroní"
-      draggable="true"
-     ></gmp-advanced-marker>
-  </gmp-map>
-
-
-  <script
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik&libraries=maps,marker&v=beta"
-  defer
-></script>
-                  
-          
-          
-          
-                </div>
-
             <button type="submit"
                 class="inline-flex items-center bg-[#0cc0df] ml-auto py-2.5 px-4 text-xs font-medium text-center text-white bg-[p] rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                 Post comment
@@ -222,24 +188,7 @@ if (Astro.request.method === "POST") {
         </article>
         ))}
       </div>
-
-      <button
-        type="submit"
-        class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 inline-block mr-1"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
-            clip-rule="evenodd"></path>
-        </svg>
-        Enviar comentario
-      </button>
+      
     </form>
   </div>
 </Layout>

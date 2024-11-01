@@ -22,11 +22,8 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "astro": "^4.16.7",
-<<<<<<< HEAD
     "astro-cloudinary": "^1.1.2",
-=======
     "astro-icon": "^1.1.1",
->>>>>>> 71a1f3f047670f82092054241de096b74a2932a9
     "auth-astro": "^4.1.2",
     "flowbite": "^2.5.2",
     "i": "^0.3.7",

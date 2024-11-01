@@ -19,56 +19,33 @@ const to = from + articlesPerPage - 1; // Índice de fin
 // Obtener la cantidad total de artículos
 const { count: totalArticles, error: errorTotalArticles } = await supabase
   .from("articles")
-<<<<<<< HEAD
-  .select("title, id, categorys_articles ( category_id (*) ), coverimage, content", { count: "exact" })
-  .ilike("categorys_articles.category_id.name", ${nameQueryToSearch})
-  .is("categorys_articles.category_id", null)
+  .select("title, id, tags!inner(*) , coverimage, content", { count: "exact" })
+  .ilike("tags.name",`%${nameQueryToSearch}%`)
+
   
 console.log(totalArticles)
 // Obtener los artículos para la página actual
 const { data: articles, error: errorArticles } = await supabase
   .from("articles")
-  .select("title, id, categorys_articles ( category_id (*) ), coverimage, content")
-  .ilike("categorys_articles.category_id.name", ${nameQueryToSearch})
-  .is("categorys_articles.category_id", null)
+  .select("title, id, tags!inner(*), coverimage, content")
+  .ilike("tags.name", `%${nameQueryToSearch}%`)
   .range(from, to)
+
+const { data: categories, error: errorCategories } = await supabase
+  .from("tags")
+  .select("name, id")
+  .order("name", { ascending: true })
+  .range(0, 3);
+
+const { data: relatedArticles, error: errorRelatedArticles } = await supabase
+  .from("posts")
+  .select("title, id, tags(name), coverimage, content")
+  .range(0, 2);
 
 // Redirigir a la página 404 si hay errores o no hay artículos
 if (errorArticles) {
   console.log(errorArticles)
 
-=======
-  .select("title, id, tags!inner(*), coverimage, content", { count: "exact" })
-  .ilike("tags.name", `%${nameQueryToSearch}%`);
-
-// Obtener los artículos para la página actual
-const { data: articles, error: errorArticles } = await supabase
-  .from("articles")
-  .select("title, id, tags!inner(*), coverimage, content")
-  .ilike("tags.name", `%${nameQueryToSearch}%`)
-  .range(from, to);
-
-  console.log(articles)
-
-
-// // Obtener las categorías
-// const { data: categories, error: errorCategories } = await supabase
-//   .from("tags")
-//   .select("name, id")
-//   .order("name", { ascending: true })
-//   .range(0, 3);
-
-// // Obtener artículos relacionados
-// const { data: relatedArticles, error: errorRelatedArticles } = await supabase
-//   .from("articles")
-//   .select("title, id, tags(name), coverimage, content")
-//   .range(0, 2);
-
-// Redirigir a la página 404 si hay errores o no hay artículos
-if (errorArticles || errorArticles) {
-  console.log(errorArticles)
-  console.log(errorTotalArticles)
->>>>>>> 8d384e6f08e5cae04c8fb577ed89e2d145887596
   return Astro.redirect("/404");
 }
 
@@ -153,13 +130,24 @@ const hasPreviousPage = page > 1;
     </div>
     <div class="flex flex-col gap-8">
       <section class="flex flex-col">
-<<<<<<< HEAD
-        
+        <h2 class="text-2xl font-bold text-pretty mb-2">Otras categorías</h2>
+        {
+          categories.map((category) => (
+            <a
+              href={`/categories/articles?name=${category.name}`}
+              class="bg-blue-100 text-blue-800 text-md
+               font-medium me-2 px-2.5 mr-auto py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
+            >
+              {category.name}
+            </a>
+          ))
+        }
       </section>
       <section class="flex flex-col">
         <h2 class="text-2xl font-bold text-pretty mb-2">
           Artículos relacionados
         </h2>
+        
         <ul class="flex flex-col gap-8">
           {
             // Mostrar artículos relacionados
@@ -179,10 +167,6 @@ const hasPreviousPage = page > 1;
               </a>
             ))
           }
-=======
-        <h2 class="text-2xl font-bold text-pretty mb-2">Otras categorías</h2>
-
->>>>>>> 8d384e6f08e5cae04c8fb577ed89e2d145887596
         </ul>
       </section>
     </div>

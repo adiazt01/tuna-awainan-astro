@@ -1,0 +1,67 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import { supabase } from "../../../../lib/supabase";
+import { getProfileSession } from "../../../../utils/auth";
+
+const { session, profile } = await getProfileSession(Astro);
+
+if (session === null && profile.role !== "publisher") {
+  return Astro.redirect("/404");
+}
+
+if (Astro.request.method === "POST") {
+    try {
+        const data = await Astro.request.formData();
+        const title = data.get("title");
+        const content = data.get("content");
+
+        if (!title || !content) {
+            throw new Error("El título y el contenido son requeridos");
+        }
+        console.log(profile)
+        const { data: newPost, error: errorNewPost } = await supabase
+            .from("blogs")
+            .insert([
+                {
+                    title,
+                    content,
+                    user_id: profile.id
+                },
+            ]);
+
+        if (errorNewPost) {
+            throw new Error("Error al crear la publicación");
+        }
+
+        return Astro.redirect(`/comunity/posters`);
+    } catch (error) {
+        console.error(`[ERROR] ${error.message}`);
+        return Astro.redirect("/404");
+    }
+}
+
+---
+<Layout title="Crear nuevo post">
+<section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">A;adir nueva publicación</h2>
+        <form method="POST">
+            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                <div class="sm:col-span-2">
+                    <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titulo</label>
+                    <input type="text" name="title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#0cc0df] focus:border-[#0cc0df] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#0cc0df] dark:focus:border-[#0cc0df]" placeholder="Titulo de la publicación" required="">
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Contenido
+                    </label>
+                    <textarea name="content" id="content" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-[#0cc0df] focus:border-[#0cc0df] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#0cc0df] dark:focus:border-[#0cc0df]" placeholder="Contenido de la publicación" required=""></textarea>
+                </div>
+            </div>
+            <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#0cc0df] rounded-lg focus:ring-4 focus:ring-[#0cc0df] dark:focus:ring-[#0cc0df] hover:bg-[#0cc0df]">
+            Crear publicación
+            </button>
+        </form>
+    </div>
+  </section>
+</Layout>

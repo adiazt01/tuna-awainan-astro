@@ -59,7 +59,7 @@ const hasNextPage = to + 1 < totalArticles;
 const hasPreviousPage = page > 1;
 ---
 
-<Layout title="Tuna Awainan: Articulos">
+<Layout title="Tuna Awainan: Artículos">
   <div class="items-center justify-center mt-5">
     <!-- Botón para la página anterior -->
     <a
@@ -82,48 +82,55 @@ const hasPreviousPage = page > 1;
     <div class="flex flex-col gap-4">
       <header>
         <h1 class="text-4xl font-bold text-pretty">Artículos</h1>
-        <p class="text-lg text-gray-700 dark:text-gray-400">
-          {articles.length} Artículos encontrados de la categoría {
-            nameQueryToSearch?.toLowerCase()
-          }
+        <p class="text-base text-gray-700 dark:text-gray-400 ">
+          {articles.length} Artículos encontrados de la categoría  
+          <span>
+            {nameQueryToSearch?.toLowerCase()}
+          </span>   
         </p>
       </header>
-      <ul class="grid grid-cols-1 max-w-screen-md gap-8">
-        {
-          // Mostrar los artículos
-          articles.map((article) => (
-            <li class="w-full">
-              <a
-                href={`/categories/articles/${article.id}`}
-                class="grid grid-cols-1 border-x-lime-100 lg:grid-cols-2 w-full items-start bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 min-h-56"
-              >
-                <img
-                  class="object-cover w-full h-ull min-h-56 rounded-t-lg  md:rounded-none md:rounded-s-lg"
-                  src={article.coverimage}
-                  alt=""
-                />
-                <div class="flex h-full flex-col justify-between p-4 leading-normal">
-                  <h5 class="mb-2 text-2xl text-pretty truncate font-bold tracking-tight text-gray-900 dark:text-white">
-                    {article.title.length > 50
-                      ? article.title.substring(0, 35) + "..."
-                      : article.title}
-                  </h5>
-                  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    {article.content.substring(0, 100) + "..."}
-                  </p>
 
-                  <button
-                    type="button"
-                    class="text-white mt-auto bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  >
-                    Leer más
-                  </button>
-                </div>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+        <!--aqui se muestran los articulos -->
+      <div class="container-article">
+        <ul class="grid grid-cols-1 max-w-screen-md gap-8">
+          {
+            // Mostrar los artículos
+            articles.map((article) => (
+              <li class="w-full">
+                <a
+                  href={`/categories/articles/${article.id}`}
+                  class="grid grid-cols-1 border-x-lime-100 lg:grid-cols-2 w-full items-start bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 min-h-56"
+                >
+                  <img
+                    class="object-cover w-full h-ull min-h-56 rounded-t-lg  md:rounded-none md:rounded-s-lg"
+                    src={article.coverimage}
+                    alt=""
+                  />
+                  <div class="flex h-full flex-col justify-between p-4 leading-normal">
+                    <h5 class="mb-2 text-2xl text-pretty truncate font-bold tracking-tight text-gray-900 dark:text-white">
+                      {article.title.length > 50
+                        ? article.title.substring(0, 35) + "..."
+                        : article.title}
+                    </h5>
+                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                      {article.content.substring(0, 100) + "..."}
+                    </p>
+  
+                    <button
+                      type="button"
+                      class="button text-white mt-auto bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    >
+                      Leer más
+                    </button>
+                  </div>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      
       <div class="flex justify-center mt-8">
        
       </div>
@@ -135,8 +142,8 @@ const hasPreviousPage = page > 1;
           categories.map((category) => (
             <a
               href={`/categories/articles?name=${category.name}`}
-              class="bg-blue-100 text-blue-800 text-md
-               font-medium me-2 px-2.5 mr-auto py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
+              class="categoria-seleccion bg-blue-100 text-blue-800 text-md
+               font-medium mb-2 me-2 px-2.5 mr-auto py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
             >
               {category.name}
             </a>
@@ -149,28 +156,67 @@ const hasPreviousPage = page > 1;
         </h2>
         
         <ul class="flex flex-col gap-8">
-          {
-            // Mostrar artículos relacionados
-            relatedArticles && relatedArticles.map((article) => (
-              <a
-                href={`/categories/articles/${article.id}`}
-                class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-              >
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  {article.title.length > 50
-                    ? article.title.substring(0, 35) + "..."
-                    : article.title}
-                </h5>
-                <p class="font-normal text-gray-700 dark:text-gray-400">
-                  {article.content.substring(0, 100) + "..."}
-                </p>
-              </a>
-            ))
-          }
+          <!--  Mostrar artículos relacionado-->
+          <div class=""  >
+            {            
+              relatedArticles && relatedArticles.map((article) => (
+                <a
+                  href={`/categories/articles/${article.id}`}
+                  class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+                >
+                  <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    {article.title.length > 50
+                      ? article.title.substring(0, 35) + "..."
+                      : article.title}
+                  </h5>
+                  <p class="font-normal text-gray-700 dark:text-gray-400">
+                    {article.content.substring(0, 100) + "..."}
+                  </p>
+                </a>
+              ))
+            }
+          </div>
         </ul>
       </section>
     </div>
   </section>
 </Layout>
 
-<style></style>
+<style>
+  .button{
+      background-color: rgb(10, 172, 203);
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+  }
+
+  .button:hover {
+        background-color: #0aaccbd4;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+    }
+
+  span{
+    color: #0aaccbd4;
+  }
+
+  .categoria-seleccion{
+    background-color: #0aaccbc9;
+    color: white;
+    width: 50%;
+    min-width: max-content;
+}
+
+  .categoria-seleccion:hover {
+        background-color: #0aaccbd4;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+  }
+
+  .container-article{
+
+  }
+</style>

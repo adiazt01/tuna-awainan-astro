@@ -4,26 +4,17 @@ interface Props {
     label: string;
     onClick?: () => void;
     id?: string;
+    isActive?: boolean;
 }
 
-
-const {link, label} = Astro.props
-
-const currentPath = Astro.url.pathname;
-
-const isActive = currentPath === link;
+const { link, label, onClick, isActive } = Astro.props;
 ---
 
 <li>
-    <a href={link} class:list={
-        [
-            'flex items-center px-3 py-2 text-lg font-medium rounded-md',
-            isActive ? 'bg-[#0cc0df] text-white' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-        ]
-    }>
-
-       <span class="ms-3">
-        {label.toUpperCase()}
-       </span>
+    <a href={link} onClick={onClick} class:list={[
+        'flex items-center px-3 py-2 text-lg font-medium rounded-md',
+        isActive ? 'bg-[#0cc0df] text-white' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+    ]}>
+        <span class="ms-3">{label.toUpperCase()}</span>
     </a>
- </li>
+</li>

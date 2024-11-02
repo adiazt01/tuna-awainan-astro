@@ -31,7 +31,7 @@ const { session, profile } = await getProfileSession(Astro);
 
 <Layout title="Tuna-Awainan: comunidad">
   <div class="container mx-auto px-4 font" >
-    <h1 class="text-5xl font-bold text-center my-4">Comunidad</h1>
+    <h1 class="text-5xl font-bold text-center my-6 mb-4">Post Comunidad</h1>
     {
       session !== null  && profile[0]?.role === "publisher" && (
         <a href="/comunity/posters/new" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -43,68 +43,79 @@ const { session, profile } = await getProfileSession(Astro);
       )
     }
 
-    <ul
-      class="grid grid-cols-1 max-w-screen-xl mx-auto md:grid-cols-2 lg:grid-cols-3 gap-4 pb-12"
-    >
-      {
-        totalArticles.map((article) => (
-          <article class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <a href={`/comunity/posters/${article.id}`} class="block">
-              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {article.title}
-              </h5>
-            </a>
-            <header class="flex flex-row items-center w-full gap-2">
-              <div>
+    <!--aqui se muestra la previa de un post -->
+    <div class="">
+      <ul class="grid grid-cols-1 max-w-screen-xl mx-auto gap-8 px-40 mt-10">
+        {
+          totalArticles.map((article) => (
+            <article class=" p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              <a href={`/comunity/posters/${article.id}`} class="block">
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  {article.title}
+                </h5>
+              </a>
+              <header class="flex flex-row items-center w-full gap-2">
+                <div>
+                  <a
+                    href={`/comunity/posters/${article.id}`}
+                    class="text-sm font-semibold text-gray-700 dark:text-gray-200"
+                  >
+                    {article.user_id.username}
+                  </a>
+                  <p class="text-xs text-gray-600 dark:text-gray-300">
+                    {new Date(article.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+              </header>
+          
+              <div class="flex flex-row w-full items-end justify-end">
                 <a
                   href={`/comunity/posters/${article.id}`}
-                  class="text-sm font-semibold text-gray-700 dark:text-gray-200"
+                  class="inline-flex mt-4 ml-auto px-3 py-2 text-sm font-medium text-center text-white  rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  style="background-color: #0cc0df"
                 >
-                  {article.user_id.username}
+                  Leer más
+                  <svg
+                    class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 14 10">
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M1 5h12m0 0L9 1m4 4L9 9"
+                    />
+                  </svg>
                 </a>
-                <p class="text-xs text-gray-600 dark:text-gray-300">
-                  {new Date(article.created_at).toLocaleDateString()}
-                </p>
               </div>
-            </header>
-            <div class="flex flex-row w-full items-end justify-end">
-              <a
-                href={`/comunity/posters/${article.id}`}
-                class="inline-flex mt-4 ml-auto px-3 py-2 text-sm font-medium text-center text-white  rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                style="background-color: #0cc0df"
-              >
-                Leer más
-                <svg
-                  class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </a>
-            </div>
           </article>
         ))
       }
     </ul>
+    <a href="mailto:grupotunawainan@gmail.com?subject=Solicitud para crear posts&body=Coloque su usuario y escriba la razon del porque quiere crear un post en la pagina."><button class="ml-auto mt-4 mb-10 px-3 py-2 text-lg font-medium text-center text-white rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    style="background-color: #0cc0df">Solicitar acceso para crear un posts</button></a>
   </div>
 </Layout>
 
 <style>
 
   .font{
-
     font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
-  
+  }
 
+  .forumCard {
+    margin-top: 5%; /* font-family: 'Quicksand Variable';      */
+  }
+
+  .font-custom {
+    font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
+  }
+
+  .author, .date {
+    font-style: italic;
   }
 
 </style>

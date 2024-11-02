@@ -28,13 +28,13 @@ const DATA_CATEGORIES_MOCK = [
   },
 ];
 ---
-  <Layout title="Categorías">
-    <section class="grid grid-cols-1 grid-rows-4 h-screen">
-      {
-        // Mapeo de los datos de categorías para crear componentes CardCategory
-        DATA_CATEGORIES_MOCK.map((data) => (
-          <CardCategory  name={data.name} image={data.image} />
-        ))
-      }
-    </section>
-  </Layout>
+<Layout title="Categorías">
+  <section class="grid grid-cols-1">
+    {
+      // Mapeo de los datos de categorías para crear componentes CardCategory
+      DATA_CATEGORIES_MOCK.map((data) => (
+        <CardCategory  name={data.name} image={data.image} />
+      ))
+    }
+  </section>
+</Layout>

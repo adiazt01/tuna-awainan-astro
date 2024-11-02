@@ -14,7 +14,7 @@ interface Props {
 const {user_id, created_at, content} = Astro.props
 ---
 
-<article class="text-base bg-white rounded-lg dark:bg-gray-900">
+<article class="text-base rounded-lg dark:bg-gray-900 ">
     <footer class="flex items-center mb-2">
       <div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
         <span class="font-semibold text-gray-600 dark:text-gray-300">
@@ -37,3 +37,9 @@ const {user_id, created_at, content} = Astro.props
     </p>
     <Separator />
 </article>
+
+<style>
+  article{
+    background-color: #f8f9fa;
+  }
+</style>

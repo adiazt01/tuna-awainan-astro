@@ -1,8 +1,9 @@
 ---
 import CommentItem from "../../../../components/CommentItem.astro";
+import ListItems from "../../../../components/diccionariComponents/ListItems.astro";
 import Layout from "../../../../layouts/Layout.astro";
+import LayoutAquarium from "../../../../layouts/LayoutAquarium.astro";
 import { supabase } from "../../../../lib/supabase";
-
 const { id } = Astro.params;
 
 if (!id) {
@@ -127,7 +128,17 @@ if (Astro.request.method === "POST") {
     }
   }
 }
+
+
+
 ---
+ 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+crossorigin=""></script>
 
 <Layout title={`Post: ${blog[0]?.title}`}>
   <section class="grid p-8 grid-cols-1 w-full mx-auto max-w-screen-xl">
@@ -151,6 +162,8 @@ if (Astro.request.method === "POST") {
       <p class="font-normal text-gray-700 dark:text-gray-400">
         {blog[0]?.content}
       </p>
+     <div style="height: 300px; width: 500px" id="map"></div>
+
     </div>
     <section class="bg-white dark:bg-gray-900 py-8 antialiased">
       <div class="mx-auto px-4">
@@ -191,3 +204,31 @@ if (Astro.request.method === "POST") {
   </section>
 
 </Layout>
+
+<script>
+
+  import "leaflet";
+
+  var map = L.map('map').setView([8.296963, -62.711613], 13);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+  var marker = L.marker([8.296963, -62.711613]).addTo(map);
+
+  marker.bindPopup("<b>Aqui se encuentra la UCAB</b>").openPopup();
+
+  var marker2 = L.marker();
+
+  function onMapClick(e) {
+    marker2
+        .setLatLng(e.latlng)
+        .bindPopup("<b>Hola </b>" + e.latlng.toString())
+        .openPopup()
+        .addTo(map);
+        
+  }
+
+  map.on('click', onMapClick);
+
+</script>

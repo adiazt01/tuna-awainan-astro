@@ -3,6 +3,7 @@
 import type { APIRoute } from "astro";
 import { supabase } from "../../../lib/supabase";
 
+
 enum Role {
     user = "user",
     admin = "admin",
@@ -29,6 +30,9 @@ export const POST: APIRoute = async ({ request, redirect }) => {
         }
     }
   });
+
+  console.log(email);
+
 
   console.log(error);
   if (error) {

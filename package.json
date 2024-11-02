@@ -19,6 +19,7 @@
     "@fontsource-variable/quicksand": "^5.1.0",
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@supabase/supabase-js": "^2.45.6",
+    "@types/nodemailer": "^6.4.16",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "astro": "^4.16.7",

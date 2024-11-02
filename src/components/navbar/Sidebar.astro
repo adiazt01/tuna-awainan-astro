@@ -4,18 +4,41 @@ import { supabase } from "../../lib/supabase";
 import '@fontsource-variable/quicksand';
 
 const LINKS = [
-    { label: 'Inicio', link: '/' },
-    { label: 'Acuario', link: '/aquarium/' },
-    { label: 'Artículos', link: '/categories' },
-    { label: 'Foro', link: '/comunity/forum' },
-    { label: 'Posts', link: '/comunity/posters' },
-    { label: 'Nuestro equipo', link: '/about' },
-    { label: 'Cuenta', link: '/signin' },
-];
+    {
+        label: 'Inicio',
+        link: 'http://localhost:4321/'
+    },
+    {
+        label: 'Acuario Natural',
+        link: 'http://localhost:4321/aquarium/'
+    },
+    {
+        label: 'Artículos del agua',
+        link: 'http://localhost:4321/categories'
+    }, 
 
-const currentPath = Astro.url.pathname;
+    {
+        label: 'Foro',
+        link: 'http://localhost:4321/comunity/forum'
+    },
+    {
+        label: 'Posts',
+        link: 'http://localhost:4321/comunity/posters'
+    },
 
-const { cookies } = Astro;
+    {      
+        label: 'Nuestro equipo ',
+        link: 'http://localhost:4321/about'  
+    },
+    {
+        label: 'Cuenta',
+        link: 'http://localhost:4321/signin'
+    }
+]
+
+const currentPath = Astro.url.pathname; //para leer la pagina actual
+
+const {cookies} = Astro;
 const accessToken = cookies.get("sb-access-token");
 const refreshToken = cookies.get("sb-refresh-token");
 

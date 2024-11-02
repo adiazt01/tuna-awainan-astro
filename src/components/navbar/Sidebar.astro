@@ -1,45 +1,47 @@
 ---
-import SidebarItem from "./SidebarItem.astro"
+import SidebarItem from "./SidebarItem.astro";
 import { supabase } from "../../lib/supabase";
-// Supports weights 300-700
 import '@fontsource-variable/quicksand';
 
 const LINKS = [
     {
         label: 'Inicio',
-        link: '/'
+        link: 'http://localhost:4321/'
     },
     {
         label: 'Acuario Natural',
-        link: '/aquarium/'
+        link: 'http://localhost:4321/aquarium/'
     },
     {
         label: 'Artículos del agua',
-        link: '/categories'
+        link: 'http://localhost:4321/categories'
     }, 
 
     {
         label: 'Foro',
-        link: '/comunity/forum'
+        link: 'http://localhost:4321/comunity/forum'
     },
     {
         label: 'Posts',
-        link: '/comunity/posters'
+        link: 'http://localhost:4321/comunity/posters'
     },
 
     {      
         label: 'Nuestro equipo ',
-        link: '/about'  
+        link: 'http://localhost:4321/about'  
     },
     {
         label: 'Cuenta',
-        link: '/signin'
+        link: 'http://localhost:4321/signin'
     }
 ]
+
+const currentPath = Astro.url.pathname; //para leer la pagina actual
 
 const {cookies} = Astro;
 const accessToken = cookies.get("sb-access-token");
 const refreshToken = cookies.get("sb-refresh-token");
+
 let userId;
 if (accessToken && refreshToken) {
   let session = await supabase.auth.setSession({
@@ -49,52 +51,93 @@ if (accessToken && refreshToken) {
 
   try {
     if (session.error) {
-      Astro.cookies.delete("sb-access-token", {
-        path: "/",
-      });
-      Astro.cookies.delete("sb-refresh-token", {
-        path: "/",
-      });
+      Astro.cookies.delete("sb-access-token", { path: "/" });
+      Astro.cookies.delete("sb-refresh-token", { path: "/" });
       return Astro.redirect("/signin");
-    } 
+    }
   } catch (error) {
-  // Si hay un error al establecer la sesión, borra las cookies y redirige a la página de inicio de sesión
-  Astro.cookies.delete("sb-access-token", {
-    path: "/",
-  });
-  Astro.cookies.delete("sb-refresh-token", {
-    path: "/",
-  });
-  return Astro.redirect("/signin");
+    Astro.cookies.delete("sb-access-token", { path: "/" });
+    Astro.cookies.delete("sb-refresh-token", { path: "/" });
+    return Astro.redirect("/signin");
   }
   userId = session.data.user?.id;
 }
----
 
-<aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-gray-50 flex flex-col justify-center items-center -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-    
-    <img src="/src/assets/images/TUNA-awainan.png"
-    style="height: 20%;">
-    
+---
+<aside id="default-sidebar" class="sidebar">
+  <div class="logo-sidebar">
+    <img src="/src/assets/images/TUNA-awainan.png" class="logo-image" />
     <div class="text-left">
-        <h1>Tuna <br/><span style="color: #0cc0df;">Awainan</span></h1>
+      <h1>Tuna <br /><span class="highlight">Awainan</span></h1>
     </div>
-    <div class="w-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-        <ul class="space-y-2 font-medium">
-            {LINKS.map((link, index) => (
-                <li>
-                    <SidebarItem id="sidebar" link={link.link} label={link.label} onClick={() => toggleSidebar()} />
-                   
-                </li>
-            ))}
-        </ul>
-    </div>
- </aside>
- 
+  </div>
+
+  <div class="menu-sidebar">
+    <ul class="menu-items">
+      {LINKS.map((link, index) => (
+        <li key={index}>
+          <SidebarItem
+            id="sidebar"
+            link={link.link}
+            label={link.label}
+            onClick={() => toggleSidebar()}
+            isActive={currentPath === link.link}
+          />
+        </li>
+      ))}
+    </ul>
+  </div>
+</aside>
+
 <style>
-    h1{
-        font-family: 'Quicksand Variable', sans-serif;
-        font-size: 48px;
-        font-weight: 700;
-    }
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    width: 16rem; 
+    height: 100vh; 
+    background-color: #f9fafb; 
+    overflow: hidden; 
+  }
+
+  .logo-sidebar {
+    flex: 0 0 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: -4em;
+    margin-bottom: -6em;
+  }
+
+  .logo-image {
+    height: 20%;
+  }
+
+  h1 {
+    font-family: 'Quicksand Variable', sans-serif;
+    font-size: 2rem; 
+    font-weight: 700;
+  }
+
+  .highlight {
+    color: #0cc0df;
+  }
+
+  .menu-sidebar {
+    flex: 1 1 60%; 
+    overflow-y: auto; 
+  }
+
+  .menu-items {
+    padding: 1rem 0.75rem;
+    font-family: 'Quicksand Variable', sans-serif;
+  }
+
+  .menu-items li {
+    margin-bottom: 0.5rem;
+  }
 </style>

@@ -1,34 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Button from "../components/Button.astro";
-import { supabase } from "../lib/supabase";
 
-
-
-// Obtener los parámetros de búsqueda de la URL
-const querySearch = new URLSearchParams(Astro.url.search);
-const nameQueryToSearch = querySearch.get("name");
-
-
-//consultar las imagense 
-const {data:images, error: errorTotalArticles} = await supabase
-	.from("articles")
-	.select("coverimage, id")
-
-console.log(images)
-const bubbles = []
-
-if (images) {
-	for(let i = 0; i < 10; i++){
-		bubbles.push(
-			{style: 'bubble x'+(i+1),img: images[i]?.coverimage,id:images[i].id}
-		)
-	}
-} else {
-	console.error("No images found");
-}
-
-console.log(bubbles)
 ---
 
 <Layout title="Tuna Awainan">

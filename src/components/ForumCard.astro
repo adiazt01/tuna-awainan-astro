@@ -6,33 +6,39 @@ var { id, title, content, author, date , edo} = Astro.props;
 
 ---
 
-<div class="forumCard flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all duration-200 p-4 w-full min-w-[500px] mx-2 font-custom"> 
-  <!-- se muestra la informacion previa del foro -->
-  <a href={`/comunity/forum/${id}`} class="w-full"> 
-    <div class="flex flex-col justify-center w-full">
-      <div class="flex justify-between items-center mb-2">
-        <span class="author text-xs text-gray-500 dark:text-gray-400">{author} | {date}</span>
-        <span class="date text-xs text-gray-500 dark:text-gray-400">{edo}</span>
+<div>
+  <div class="forumCard grid grid-cols-1 max-w-screen-xl mt-10 
+            bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700
+            dark:bg-gray-800 dark:hover:bg-gray-700 transition-all duration-200 p-4 min-w-[500px] 
+            mx-40 font-custom"> 
+    <!-- se muestra la informacion previa del foro -->
+    <a href={`/comunity/forum/${id}`} class=""> 
+      <div class="flex flex-col justify-center">
+        <div class="flex justify-between items-center mb-2">
+          <span class="author text-xs text-gray-500 dark:text-gray-400">{author} | {date}</span>
+          <span class="date text-xs text-gray-500 dark:text-gray-400">{edo}</span>
+        </div>
+        <h5 class="h5 text-xl font-bold tracking-tight text-gray-900 dark:text-white text-left"> 
+          {title.substring(0, 50) + '...'}
+        </h5>
+        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 text-left"> 
+          {content.substring(0, 100) + '...'}
+        </p>
       </div>
-      <h5 class="h5 text-xl font-bold tracking-tight text-gray-900 dark:text-white text-left"> 
-        {title.substring(0, 50) + '...'}
-      </h5>
-      <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 text-left"> 
-        {content.substring(0, 100) + '...'}
-      </p>
-    </div>
-  </a>
-  
-  <!--aqui se muestran los emojil --> 
-  <div class="emojil flex justify-end space-x-2 mt-4">
+    </a>
+    
+    <!--aqui se muestran los emojil --> 
     <div class="emojil flex justify-end space-x-2 mt-4">
-      <button aria-label="muy feliz"><i class="fas fa-laugh-beam text-[18px] text-[#3ecbe4]"></i></button>
-      <button aria-label="feliz"><i class="fas fa-smile text-[18px] text-[#3ecbe4]"></i></button>
-      <button aria-label="normal"><i class="fas fa-meh text-[18px] text-[#3ecbe4]"></i></button>
-      <button aria-label="triste"><i class="fas fa-frown text-[18px] text-[#3ecbe4]"></i></button>
-      <button aria-label="enojado"><i class="fas fa-angry text-[18px] text-[#3ecbe4]"></i></button>
-    </div>  </div>
+      <div class="emojil flex justify-end space-x-2 mt-4">
+        <button aria-label="muy feliz"><i class="fas fa-laugh-beam text-[18px] text-[#3ecbe4]"></i></button>
+        <button aria-label="feliz"><i class="fas fa-smile text-[18px] text-[#3ecbe4]"></i></button>
+        <button aria-label="normal"><i class="fas fa-meh text-[18px] text-[#3ecbe4]"></i></button>
+        <button aria-label="triste"><i class="fas fa-frown text-[18px] text-[#3ecbe4]"></i></button>
+        <button aria-label="enojado"><i class="fas fa-angry text-[18px] text-[#3ecbe4]"></i></button>
+      </div>  </div>
+  </div>  
 </div>
+
 
 <style>
 /*<i class="fi fi-rs-laugh-beam"> */
@@ -56,4 +62,5 @@ var { id, title, content, author, date , edo} = Astro.props;
   .author, .date {
     font-style: italic;
   }
+
 </style>

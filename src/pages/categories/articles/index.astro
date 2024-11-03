@@ -1,5 +1,6 @@
 ---
 import Image from "astro/components/Image.astro";
+import BackButton from "../../../components/BackButton.astro";
 import Layout from "../../../layouts/Layout.astro";
 import { supabase } from "../../../lib/supabase";
 
@@ -60,6 +61,7 @@ const hasPreviousPage = page > 1;
 ---
 
 <Layout title="Tuna Awainan: Artículos">
+  <BackButton />
   <div class="items-center justify-center mt-5">
     <!-- Botón para la página anterior -->
     <a

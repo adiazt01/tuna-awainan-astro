@@ -1,0 +1,39 @@
+---
+const {username, date, content} = Astro.props
+console.log(date)
+
+---
+
+<div class="comment">
+    <div class="comment-author">{username}</div>
+    <div class="comment-date">{date}</div>
+    <p class="comment-text">{content}</p>
+  </div>
+
+<style>
+  .comment {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .comment:last-child {
+    border-bottom: none;
+  }
+
+  .comment-author {
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .comment-date {
+    font-size: 0.875rem;
+    color: var(--secondary-text-color);
+    margin-bottom: 5px;
+  }
+
+  .comment-text {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-top: 5px;
+  }
+</style>

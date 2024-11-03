@@ -7,10 +7,8 @@ import { supabase } from "../../../lib/supabase";
 //consultamos los foros
 const { data: foros, error: errorForo } = await supabase
   .from("forums")
-  .select("*")
+  .select("*, users!inner(username)")
 
-console.log(foros)
-console.log(errorForo)
 
 ---
 
@@ -24,7 +22,7 @@ console.log(errorForo)
         <h2>Foros publicados: {foros.length}</h2>
         <h1 class="text-5xl font-bold text-center -mt-4">Foro</h1>
         {foros?.map((foro)=>(
-            <ForumCard id={foro.id} title={foro.title} content={foro.content} author={foro.} date={foro.date.toString()}/>
+            <ForumCard id={foro.id} title={foro.title} content={foro.content} author={foro.users.username} date={foro.date.toString()}/>
           ))} </>
         ): (
         <h2>No hay foros publicados hasta los momentos.</h2>

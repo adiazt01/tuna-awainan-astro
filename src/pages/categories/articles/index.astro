@@ -23,8 +23,7 @@ const { count: totalArticles, error: errorTotalArticles } = await supabase
   .select("title, id,  tags!inner(*) , coverimage, content", { count: "exact" })
   .ilike("tags.name",`%${nameQueryToSearch}%`)
 
-  
-console.log(totalArticles)
+
 // Obtener los artículos para la página actual
 const { data: articles, error: errorArticles } = await supabase
   .from("articles")

@@ -43,7 +43,7 @@ try {
 
 // Obtiene el correo electrónico del usuario de la sesión
 const username = session.data.user?.user_metadata.username
-console.log(username)
+
 
 ---
 <Layout title="dashboard">
@@ -61,13 +61,15 @@ console.log(username)
         <button class="sing_out" type="submit">cerrar sesion</button>
       </form>
     </div>
-  
-      <img
-      src="https://statics.diariomendoza.com.ar/2023/09/650842aa6b64e.jpg"
+  <div>
+    <img
+      src="https://socoadventures.net/wp-content/uploads/2023/01/Delta-Orinoco-Rio.webp"
       class="h-full w-full object-cover"/>
-
+  </div>
+      
   </div>
   
+
 </Layout>
 <style>
   body{
@@ -97,12 +99,6 @@ console.log(username)
   }
   button{
     margin-bottom: 15px;
-  }
-  img{
-    object-position: left;
-    margin-top:20px;
-    filter: grayscale(100%) sepia(20%) contrast(90%);
-
   }
   p{
     font-weight: 500;

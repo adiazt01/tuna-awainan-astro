@@ -55,8 +55,7 @@ const { data: comments, error: commentsError } = await supabase
   .eq("article_id", id?.toString())
   .order("created_at", { ascending: false })
 
-// Muestra los comentarios en la consola para depuración
-console.log(comments);
+
 
 // Si hay un error al obtener los comentarios, lo muestra en la consola
 if (commentsError) {

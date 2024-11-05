@@ -31,9 +31,6 @@ const { data: comments, error: errorComments } = await supabase
   .eq("blog_id", id)
   .order("created_at", { ascending: false });
 
-console.log(comments);
-
-console.log(blog);
 
 if (errorBlog) {
   return Astro.redirect("/404");

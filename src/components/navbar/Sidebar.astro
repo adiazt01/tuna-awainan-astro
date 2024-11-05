@@ -15,6 +15,7 @@ const LINKS = [
 
 const currentPath = Astro.url.pathname; //para leer la pagina actual
 
+
 const { cookies } = Astro;
 
 const accessToken = cookies.get("sb-access-token");
@@ -41,6 +42,7 @@ if (accessToken && refreshToken) {
   userId = session.data.user?.id;
 }
 
+
 ---
 
 <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-gray-50 flex flex-col justify-center items-center -translate-x-full sm:translate-x-0" aria-label="Sidebar">
@@ -55,7 +57,8 @@ if (accessToken && refreshToken) {
       <ul class="space-y-2 font-medium">
           {LINKS.map((link, index) => (
               <li>
-                  <SidebarItem id="sidebar" link={link.link} label={link.label} onClick={() => toggleSidebar()} />
+                
+                  <SidebarItem id="sidebar" link={link.link} label={link.label} actual={currentPath} />
                  
               </li>
           ))}

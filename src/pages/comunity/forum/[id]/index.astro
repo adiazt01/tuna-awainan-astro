@@ -28,15 +28,16 @@ if (commentsError) {
   console.error(commentsError);
 }
 
+//extraemos todos los comentarios de la lista 
+
 //consultamos las marcas 
-/*
 const {data: marcas, error: errorMarcas} = await supabase
   .from("coments_forums_location")
-  .select("*, forums_comments!inner(content)")
-  .eq("forums_comments(forum_id)", id);
+  .select("*, forums_comments!inner(id)")
+
+
 
 console.log(marcas)
-console.log(errorMarcas)*/
 
 // Maneja el envío de un nuevo comentario
 if (Astro.request.method === "POST") {
@@ -177,6 +178,7 @@ if (Astro.request.method === "POST") {
       </div>
 
       <div id="map" style="height: 300px; width: 500px" class="mt-4"></div>
+   
 
       <!-- from de comentario -->
       <form class="mb-6 flex flex-col w-11/12 mt-5" method="POST">
@@ -394,6 +396,9 @@ if (Astro.request.method === "POST") {
 
   <script>
     import "leaflet";
+    
+    
+    console.log(marcas)
 
     function initMap() {
       // Limpiar el mapa anterior si existe

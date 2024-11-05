@@ -2,6 +2,7 @@
 import { supabase } from "../../../../lib/supabase";
 import Layout from "../../../../layouts/Layout.astro";
 import BackButton from "../../../../components/BackButton.astro";
+import CommentForum from '../../../../components/CommentForum.astro';
 
 const { id } = Astro.params;
 
@@ -11,9 +12,18 @@ if(!id){
 
 const { data: foro, error: errorForo } = await supabase
   .from("forums")
-  .select("*")
+  .select("*,users!inner(username)")
   .eq('id', id);
 
+// Consulta los comentarios del post en la base de datos
+const { data: comments, error: commentsError } = await supabase
+  .from("forums_comments")
+  .select("content, created_at, user_id, created_at, users(username)")
+  .eq("forum_id", id)
+  .order("created_at", { ascending: false })
+
+console.log(comments)
+console.log(commentsError)
 ---
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -35,7 +45,7 @@ crossorigin=""></script>
       <div class="forum-content">
         <h2 class="forum-title">{foro[0].title}</h2>
         <div class="post-info">
-          <span class="author">Autor: {foro[0].author || "Anónimo"}</span>
+          <span class="author">Autor: {foro[0].users.username || "Anónimo"}</span>
           <span class="date">{foro[0].date || "Fecha desconocida"}</span>
         </div>
         <p class="forum-text">{foro[0].content}</p>
@@ -46,19 +56,12 @@ crossorigin=""></script>
       <div class="comments-section">
         <h3>Comentarios</h3>
         
-        <!-- la ide es hacer un while  -->
-        <div class="comment">
-          <div class="comment-author">Usuario1</div>
-          <div class="comment-date">2024-10-31</div>
-          <p class="comment-text">Este es un comentario de ejemplo sobre el tema del foro.</p>
-        </div>
-        <!--un while en este bloque -->
-        <div class="comment">
-          <div class="comment-author">Usuario2</div>
-          <div class="comment-date">2024-10-30</div>
-          <p class="comment-text">¡Muy interesante el tema! Gracias por compartir.</p>
-        </div>
-        
+        {
+          comments && comments.map((comment)=>(
+            <CommentForum username = {comment.users.username} date={comment.created_at} content={comment.content}/> 
+          ))
+        }
+
       </div>
 
       <!-- from de comentario -->
@@ -183,32 +186,6 @@ crossorigin=""></script>
     font-weight: 600;
     color: var(--text-color);
     margin-bottom: 15px;
-  }
-
-  .comment {
-    padding: 10px;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .comment:last-child {
-    border-bottom: none;
-  }
-
-  .comment-author {
-    font-weight: 600;
-    color: var(--text-color);
-  }
-
-  .comment-date {
-    font-size: 0.875rem;
-    color: var(--secondary-text-color);
-    margin-bottom: 5px;
-  }
-
-  .comment-text {
-    font-size: 1rem;
-    color: var(--text-color);
-    margin-top: 5px;
   }
 
   /* form de comentario */

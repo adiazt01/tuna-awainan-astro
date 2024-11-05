@@ -7,5 +7,4 @@ function toggleSidebar() {
         sidebar.classList.add('hidden');
     }
 
-    console.log('toggleSidebar');
 }

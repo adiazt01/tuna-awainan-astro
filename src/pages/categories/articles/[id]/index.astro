@@ -1,5 +1,6 @@
 ---
 import Layout from "../../../../layouts/Layout.astro";
+import BackButton from "../../../../components/BackButton.astro";
 import { supabase } from "../../../../lib/supabase";
 
 // Obtiene el parámetro 'id' de la URL
@@ -7,6 +8,29 @@ const { id } = Astro.params;
 
 // Si no hay 'id', redirige a la página 404
 if (!id) {
+  return Astro.redirect("/404");
+}
+
+const { data: articles_tags, error} = await supabase
+  .from('articles_tags')
+  .select('*')
+  .eq("article_id", id.toString())
+  .single();
+
+if(error ||  !articles_tags) {
+
+  return Astro.redirect("/404");
+  
+}
+
+const { data: tags, tags_error} = await supabase
+  .from('tags')
+  .select('*')
+  .eq("id",  articles_tags.tag_id.toString())
+  .single();
+
+if (tags_error || !tags) {
+
   return Astro.redirect("/404");
 }
 
@@ -29,8 +53,7 @@ const { data: comments, error: commentsError } = await supabase
   .eq("article_id", id?.toString())
   .order("created_at", { ascending: false })
 
-// Muestra los comentarios en la consola para depuración
-console.log(comments);
+
 
 // Si hay un error al obtener los comentarios, lo muestra en la consola
 if (commentsError) {
@@ -128,10 +151,7 @@ if (Astro.request.method === "POST") {
 
 <Layout title={`Tuna Awainan: ${post.title}`}>
   
-  <br>
-  <a href={'/categories/articles'} class= " btn-back btn-back:hover text-white fixed bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-    Atrás 
-  </a>
+  <BackButton page = `/categories/articles?name=${tags.name}`/>
   <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl mb-8">
     <img
       src={post.coverimage}

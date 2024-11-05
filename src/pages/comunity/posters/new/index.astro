@@ -18,7 +18,7 @@ if (Astro.request.method === "POST") {
         if (!title || !content) {
             throw new Error("El título y el contenido son requeridos");
         }
-        console.log(profile)
+    
         const { data: newPost, error: errorNewPost } = await supabase
             .from("blogs")
             .insert([

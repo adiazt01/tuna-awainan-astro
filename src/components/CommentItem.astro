@@ -1,5 +1,4 @@
 ---
-import moment from 'moment'
 import Separator from './Separator.astro'
 import { supabase } from '../lib/supabase'
 
@@ -27,7 +26,7 @@ const {user_id, created_at, content} = Astro.props
         </h3>
         <div class="flex items-center text-xs text-gray-500 dark:text-gray-400">
           <time datetime="2021-03-10T14:30:00">
-            {moment(created_at).fromNow()}
+            {'por terminar'}
           </time>
         </div>
       </div>

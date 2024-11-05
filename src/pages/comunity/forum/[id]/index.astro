@@ -15,6 +15,12 @@ const { data: foro, error: errorForo } = await supabase
   .eq('id', id);
 
 ---
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+crossorigin=""></script>
 
 <Layout title={`${foro[0].title} | Tuna Awainan`}>
   <div class="container font-custom">
@@ -35,6 +41,7 @@ const { data: foro, error: errorForo } = await supabase
         <p class="forum-text">{foro[0].content}</p>
       </div>
 
+      <div id="map" style="height: 300px; width: 500px" class="mt-4"></div>
       <!-- section de comentarios -->
       <div class="comments-section">
         <h3>Comentarios</h3>
@@ -250,3 +257,41 @@ const { data: foro, error: errorForo } = await supabase
     background-color: #0aa4bc;
   }
 </style>
+
+<script>
+
+  import "leaflet";
+
+  function initMap() {
+    // Limpiar el mapa anterior si existe
+    if (map) {
+      map.remove();
+    }
+
+  var map = L.map('map').setView([8.296963, -62.711613], 13);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+  var marker = L.marker([8.296963, -62.711613]).addTo(map);
+
+  marker.bindPopup("<b>Aqui se encuentra la UCAB</b>").openPopup();
+
+  var marker2 = L.marker();
+
+  function onMapClick(e) {
+    marker2
+        .setLatLng(e.latlng)
+        .bindPopup("<b>Hola </b>" + e.latlng.toString())
+        .openPopup()
+        .addTo(map);
+        
+  }
+
+  map.on('click', onMapClick);
+
+  }
+
+  initMap();
+
+</script>

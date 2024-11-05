@@ -12,7 +12,7 @@ const { data: foros, error: errorForo } = await supabase
 
 ---
 
-<Layout title="Tuna Awainan | Foro">
+<Layout title="Tuna Awainan | Expertos">
 
  
 
@@ -20,7 +20,7 @@ const { data: foros, error: errorForo } = await supabase
       {
         foros?(<>
         <h2>Foros publicados: {foros.length}</h2>
-        <h1 class="text-5xl font-bold text-center -mt-4">Foro</h1>
+        <h1 class="text-5xl font-bold text-center -mt-4">Hablando con Expertos</h1>
         {foros?.map((foro)=>(
             <ForumCard id={foro.id} title={foro.title} content={foro.content} author={foro.users.username} date={foro.date.toString()}/>
           ))} </>

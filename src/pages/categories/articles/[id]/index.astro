@@ -23,8 +23,6 @@ if(error ||  !articles_tags) {
   
 }
 
-
-
 const { data: tags, tags_error} = await supabase
   .from('tags')
   .select('*')
@@ -153,7 +151,7 @@ if (Astro.request.method === "POST") {
 
 <Layout title={`Tuna Awainan: ${post.title}`}>
   
-  <BackButton page = "/categories/articles"/>
+  <BackButton page = `/categories/articles?name=${tags.name}`/>
   <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl mb-8">
     <img
       src={post.coverimage}

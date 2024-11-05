@@ -17,7 +17,7 @@ var { id, title, content, author, date , edo} = Astro.props;
           <span class="date text-xs text-gray-500 dark:text-gray-400">{edo}</span>
         </div>
         <h5 class="h5 text-xl font-bold tracking-tight text-gray-900 dark:text-white text-left"> 
-          {title.substring(0, 50) + '...'}
+          {title}
         </h5>
         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 text-left"> 
           {content.substring(0, 100) + '...'}

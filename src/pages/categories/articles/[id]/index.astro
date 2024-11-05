@@ -10,6 +10,31 @@ if (!id) {
   return Astro.redirect("/404");
 }
 
+const { data: articles_tags, error} = await supabase
+  .from('articles_tags')
+  .select('*')
+  .eq("article_id", id.toString())
+  .single();
+
+if(error ||  !articles_tags) {
+
+  return Astro.redirect("/404");
+  
+}
+
+
+
+const { data: tags, tags_error} = await supabase
+  .from('tags')
+  .select('*')
+  .eq("id",  articles_tags.tag_id.toString())
+  .single();
+
+if (tags_error || !tags) {
+
+  return Astro.redirect("/404");
+}
+
 // Consulta el post en la base de datos usando el 'id'
 const { data: post, error: postError } = await supabase
   .from("articles")
@@ -129,7 +154,7 @@ if (Astro.request.method === "POST") {
 <Layout title={`Tuna Awainan: ${post.title}`}>
   
   <br>
-  <a href={'/categories/articles?name='} class= " btn-back btn-back:hover text-white fixed bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+  <a href={`/categories/articles?name=${tags?.name}`} class= " btn-back btn-back:hover text-white fixed bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
     Atrás 
   </a>
   <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl mb-8">

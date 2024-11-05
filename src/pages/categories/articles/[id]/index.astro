@@ -11,6 +11,31 @@ if (!id) {
   return Astro.redirect("/404");
 }
 
+const { data: articles_tags, error} = await supabase
+  .from('articles_tags')
+  .select('*')
+  .eq("article_id", id.toString())
+  .single();
+
+if(error ||  !articles_tags) {
+
+  return Astro.redirect("/404");
+  
+}
+
+
+
+const { data: tags, tags_error} = await supabase
+  .from('tags')
+  .select('*')
+  .eq("id",  articles_tags.tag_id.toString())
+  .single();
+
+if (tags_error || !tags) {
+
+  return Astro.redirect("/404");
+}
+
 // Consulta el post en la base de datos usando el 'id'
 const { data: post, error: postError } = await supabase
   .from("articles")

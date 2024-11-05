@@ -1,16 +1,13 @@
 ---
 import Image from "astro/components/Image.astro";
 import Layout from "../../../layouts/Layout.astro";
-import BackButton from "../../../components/BackButton.astro";
+
 import { supabase } from "../../../lib/supabase";
 import BackButton from "../../../components/BackButton.astro";
 
 // Obtener los parámetros de búsqueda de la URL
 const querySearch = new URLSearchParams(Astro.url.search);
 const nameQueryToSearch = querySearch.get("name");
-
-// Obtener el número de página actual, por defecto es 1
-const page = parseInt(querySearch.get("page") || "1");
 
 // // Filtrar los artículos por categoría
 
@@ -37,31 +34,11 @@ if (!totalArticles || errorTotalArticles) {
   return Astro.redirect("/404");
 }
 
-// Calcular si hay más páginas disponibles
-const hasNextPage = to + 1 < totalArticles;
-const hasPreviousPage = page > 1;
 ---
 
 <Layout title="Tuna Awainan: Artículos">
-  <div class="items-center justify-center mt-5">
-    <!-- Botón para la página anterior -->
-    <a
-      href={`/categories/articles?name=${nameQueryToSearch}&page=${page - 1}`}
-      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ml-2 ${!hasPreviousPage ? "pointer-events-none opacity-50" : ""}`}
-    >
-      Anterior
-    </a>
-    <!-- Botón para la página siguiente -->
-    <a
-      href={`/categories/articles?name=${nameQueryToSearch}&page=${page + 1}`}
-      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ml-2 ${!hasNextPage ? "pointer-events-none opacity-50" : ""}`}
-    >
-      Siguiente
-    </a>
-  </div>
-  <section
-    class="w-full px-8 pt-14 gap-24 grid grid-cols-1 lg:grid-cols-2 mx-auto"
-  >
+  <section class="w-full px-8 pt-14 gap-24 grid grid-cols-1 lg:grid-cols-2 mx-auto">
+  
     <div class="flex flex-col gap-4">
       <header>
         <!--
@@ -133,35 +110,7 @@ const hasPreviousPage = page > 1;
             </a>
           ))
         }
-      </section>
-      <section class="flex flex-col">
-        <h2 class="text-2xl font-bold text-pretty mb-2">
-          Artículos relacionados
-        </h2>
-        
-        <ul class="flex flex-col gap-8">
-          <!--  Mostrar artículos relacionado-->
-          <div class=""  >
-            {            
-              relatedArticles && relatedArticles.map((article) => (
-                <a
-                  href={`/categories/articles/${article.id}`}
-                  class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-                >
-                  <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    {article.title.length > 50
-                      ? article.title.substring(0, 35) + "..."
-                      : article.title}
-                  </h5>
-                  <p class="font-normal text-gray-700 dark:text-gray-400">
-                    {article.content.substring(0, 100) + "..."}
-                  </p>
-                </a>
-              ))
-            }
-          </div>
-        </ul>
-      </section>
+  
     </div>
   </section>
 </Layout>

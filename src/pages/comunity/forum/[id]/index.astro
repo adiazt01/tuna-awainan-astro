@@ -2,39 +2,162 @@
 import { supabase } from "../../../../lib/supabase";
 import Layout from "../../../../layouts/Layout.astro";
 import BackButton from "../../../../components/BackButton.astro";
-import CommentForum from '../../../../components/CommentForum.astro';
+import CommentForum from "../../../../components/CommentForum.astro";
 
 const { id } = Astro.params;
 
-if(!id){
-  return Astro.redirect('/404');
+if (!id) {
+  return Astro.redirect("/404");
 }
 
 const { data: foro, error: errorForo } = await supabase
   .from("forums")
   .select("*,users!inner(username)")
-  .eq('id', id);
+  .eq("id", id);
 
 // Consulta los comentarios del post en la base de datos
 const { data: comments, error: commentsError } = await supabase
   .from("forums_comments")
   .select("content, created_at, user_id, created_at, users(username)")
   .eq("forum_id", id)
-  .order("created_at", { ascending: false })
+  .order("created_at", { ascending: false });
 
-console.log(comments)
-console.log(commentsError)
+
+// Si hay un error al obtener los comentarios, lo muestra en la consola
+if (commentsError) {
+  console.error(commentsError);
+}
+
+//consultamos las marcas 
+/*
+const {data: marcas, error: errorMarcas} = await supabase
+  .from("coments_forums_location")
+  .select("*, forums_comments!inner(content)")
+  .eq("forums_comments(forum_id)", id);
+
+console.log(marcas)
+console.log(errorMarcas)*/
+
+// Maneja el envío de un nuevo comentario
+if (Astro.request.method === "POST") {
+  try {
+    const { cookies, redirect } = Astro;
+    const accessToken = cookies.get("sb-access-token");
+    const refreshToken = cookies.get("sb-refresh-token");
+    const data = await Astro.request.formData();
+    const content = data.get("content");
+
+    // Si no hay tokens de acceso, redirige a la página de inicio de sesión
+    if (!accessToken || !refreshToken) {
+      return Astro.redirect("/signin");
+    }
+
+    // Si el contenido del comentario está vacío, lanza un error
+    if (!content) {
+      throw new Error("El contenido del comentario es requerido");
+    }
+
+    let session;
+    try {
+      // Establece la sesión con los tokens
+      session = await supabase.auth.setSession({
+        refresh_token: refreshToken.value,
+        access_token: accessToken.value,
+      });
+
+      // Si hay un error en la sesión, borra las cookies y redirige a la página de inicio de sesión
+      if (session.error) {
+        Astro.cookies.delete("sb-access-token", {
+          path: "/",
+        });
+        Astro.cookies.delete("sb-refresh-token", {
+          path: "/",
+        });
+        return Astro.redirect("/signin");
+      }
+    } catch (error) {
+      // Si hay un error al establecer la sesión, borra las cookies y redirige a la página de inicio de sesión
+      Astro.cookies.delete("sb-access-token", {
+        path: "/",
+      });
+      Astro.cookies.delete("sb-refresh-token", {
+        path: "/",
+      });
+      return Astro.redirect("/signin");
+    }
+
+    const user_id = session.data.user?.id;
+
+    // Si no se encuentra el 'user_id', redirige a la página de inicio de sesión
+    if (!user_id) {
+      return Astro.redirect("/signin");
+    }
+
+    // Consulta el perfil del usuario en la base de datos
+    const { data: profile, error: errorFoundUser } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", user_id)
+      .single();
+
+    // Si hay un error al obtener el perfil del usuario, redirige a la página de inicio de sesión
+    if (errorFoundUser) {
+      return Astro.redirect("/signin");
+    }
+
+    // Inserta el nuevo comentario en la base de datos
+    const { data:newComment, error } = await supabase.from("forums_comments").insert([
+      {
+        content: content,
+        user_id: profile.id,
+        forum_id: id,
+        created_at: new Date(),
+      },
+    ])
+    .select('id');
+
+    console.log(newComment)
+    console.log(data)
+
+    // Si hay un error al guardar el comentario, lanza un error
+    if (error) {
+      throw new Error("No se pudo guardar el comentario");
+    }
+
+    //insertamos la localización con el id retornado 
+    const {data: new_location, error:ErrorLocatio } = await supabase
+    .from("coments_forums_location")
+    .insert([{
+      comment_id: newComment[0].id,
+      latitud: parseFloat(data.get('latitud')),
+      longitud: parseFloat(data.get('longitud'))
+    }])
+
+    
+
+    // Redirige a la misma página para mostrar el nuevo comentario
+    return redirect(Astro.request.url);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
+}
 ---
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-crossorigin=""></script>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""
+/>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""></script>
 
 <Layout title={`${foro[0].title} | Tuna Awainan`}>
   <div class="container font-custom">
-    
     <!--bton de regresar -->
     <div class="buttons-container">
       <BackButton page="/comunity/forum" />
@@ -45,230 +168,267 @@ crossorigin=""></script>
       <div class="forum-content">
         <h2 class="forum-title">{foro[0].title}</h2>
         <div class="post-info">
-          <span class="author">Autor: {foro[0].users.username || "Anónimo"}</span>
+          <span class="author"
+            >Autor: {foro[0].users.username || "Anónimo"}</span
+          >
           <span class="date">{foro[0].date || "Fecha desconocida"}</span>
         </div>
         <p class="forum-text">{foro[0].content}</p>
       </div>
 
       <div id="map" style="height: 300px; width: 500px" class="mt-4"></div>
+
+      <!-- from de comentario -->
+      <form class="mb-6 flex flex-col w-11/12 mt-5" method="POST">
+        <div
+          class="w-11/12 py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+        >
+          <label for="comment" class="sr-only">Tu comentario</label>
+          <textarea
+            id="comment"
+            name="content"
+            rows="6"
+            class="px-0 w-11/12 text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+            placeholder="Escribe tu comentario"
+            required></textarea>
+        </div>
+        <div class="coor">
+          <p>Marcar:</p>
+          <input name="latitud" type="number" step="any" placeholder="Latitud" required/>
+          <br />
+          <input name="longitud" type="number" step="any" placeholder="Longitud" required/>
+        </div>
+        <button
+          type="submit"
+          class="inline-flex items-center bg-[#0cc0df] ml-auto py-2.5 px-4 text-xs font-medium text-center text-white bg-[p] rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+        >
+          Post comment
+        </button>
+      </form>
+
       <!-- section de comentarios -->
       <div class="comments-section">
         <h3>Comentarios</h3>
-        
+
         {
-          comments && comments.map((comment)=>(
-            <CommentForum username = {comment.users.username} date={comment.created_at} content={comment.content}/> 
-          ))
+          comments &&
+            comments.map((comment) => (
+              <CommentForum
+                username={comment.users.username}
+                date={comment.created_at}
+                content={comment.content}
+                id_map={"#map"}
+              />
+            ))
         }
-
-      </div>
-
-      <!-- from de comentario -->
-      <div class="comment-form">
-        <h3>Deja un comentario</h3>
-        <textarea placeholder="Escribe tu comentario aquí..." class="comment-input"></textarea>
-        <button class="submit-btn">Enviar</button>
       </div>
     </div>
   </div>
 
- 
-</Layout>
-
-<style>
-  :root {
-    --bg-color: #f8f9fa;
-    --text-color: #333;
-    --secondary-text-color: #666;
-    --border-color: #e5e7eb;
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --btn-color: #0cc0df;
-  }
-
-  .font-custom {
-    font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
-  }
-
-  /* contenedor principal */
-  .container {
-    position: relative;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 20px;
-  }
-
-  /* bottones */
-  .buttons-container {
-    position: absolute;
-    top: 1em;
-    left: 10px;
-    display: flex;
-    gap: 10px;
-  }
-
-  .reply-btn {
-    background-color: var(--btn-color);
-    color: white;
-    padding: 8px 12px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .reply-btn:hover {
-    background-color: #0aa4bc;
-  }
-
-  /* continer  del foro */
-  .content-container {
-    margin-top: 30px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80%;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .forum-content {
-    width: 100%;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0px 2px 6px var(--shadow-color);
-    margin-top: 10px;
-  }
-
-  .forum-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-color);
-    margin-bottom: 10px;
-  }
-
-  .post-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    color: var(--secondary-text-color);
-    font-size: 0.9rem;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .author, .date {
-    font-style: italic;
-  }
-
-  .forum-text {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--text-color);
-  }
-
-  /* section de comentarios */
-  .comments-section {
-    width: 100%;
-    margin-top: 20px;
-    padding: 20px;
-    background-color: var(--bg-color);
-    border-radius: 8px;
-    box-shadow: 0px 2px 6px var(--shadow-color);
-  }
-
-  .comments-section h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 15px;
-  }
-
-  /* form de comentario */
-  .comment-form {
-    width: 100%;
-    margin-top: 20px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0px 2px 6px var(--shadow-color);
-    display: flex;
-    flex-direction: column;
-  }
-
-  .comment-form h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: var(--text-color);
-  }
-
-  .comment-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 1rem;
-    margin-bottom: 10px;
-    resize: vertical;
-  }
-
-  .submit-btn {
-    align-self: flex-end;
-    background-color: var(--btn-color);
-    color: white;
-    padding: 8px 16px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .submit-btn:hover {
-    background-color: #0aa4bc;
-  }
-</style>
-
-<script>
-
-  import "leaflet";
-
-  function initMap() {
-    // Limpiar el mapa anterior si existe
-    if (map) {
-      map.remove();
+  <style>
+    :root {
+      --bg-color: #f8f9fa;
+      --text-color: #333;
+      --secondary-text-color: #666;
+      --border-color: #e5e7eb;
+      --shadow-color: rgba(0, 0, 0, 0.05);
+      --btn-color: #0cc0df;
+    }
+    input {
+      font-size: 16px;
+      width: 200px;
+    }
+    .coor {
+      margin-left: 20px;
     }
 
-  var map = L.map('map').setView([8.296963, -62.711613], 13);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
-  var marker = L.marker([8.296963, -62.711613]).addTo(map);
+    .font-custom {
+      font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
+    }
 
-  marker.bindPopup("<b>Aqui se encuentra la UCAB</b>").openPopup();
+    /* contenedor principal */
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
 
-  var marker2 = L.marker();
+    /* bottones */
+    .buttons-container {
+      position: absolute;
+      top: 1em;
+      left: 10px;
+      display: flex;
+      gap: 10px;
+    }
 
-  function onMapClick(e) {
-    marker2
-        .setLatLng(e.latlng)
-        .bindPopup("<b>Hola </b>" + e.latlng.toString())
-        .openPopup()
-        .addTo(map);
-        
-  }
+    .reply-btn {
+      background-color: var(--btn-color);
+      color: white;
+      padding: 8px 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
 
-  map.on('click', onMapClick);
+    .reply-btn:hover {
+      background-color: #0aa4bc;
+    }
 
-  }
+    /* continer  del foro */
+    .content-container {
+      margin-top: 30px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 80%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-  initMap()
+    .forum-content {
+      width: 100%;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0px 2px 6px var(--shadow-color);
+      margin-top: 10px;
+    }
 
-</script>
+    .forum-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 10px;
+    }
+
+    .post-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: var(--secondary-text-color);
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .author,
+    .date {
+      font-style: italic;
+    }
+
+    .forum-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-color);
+    }
+
+    /* section de comentarios */
+    .comments-section {
+      width: 100%;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: var(--bg-color);
+      border-radius: 8px;
+      box-shadow: 0px 2px 6px var(--shadow-color);
+    }
+
+    .comments-section h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 15px;
+    }
+
+    /* form de comentario */
+    .comment-form {
+      width: 100%;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0px 2px 6px var(--shadow-color);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .comment-form h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text-color);
+    }
+
+    .comment-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      align-self: flex-end;
+      background-color: var(--btn-color);
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .submit-btn:hover {
+      background-color: #0aa4bc;
+    }
+  </style>
+
+  <script>
+    import "leaflet";
+
+    function initMap() {
+      // Limpiar el mapa anterior si existe
+      if (map) {
+        map.remove();
+      }
+
+      var map = L.map("map").setView([8.296963, -62.711613], 13);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
+
+      var marker = L.marker([8.296963, -62.711613]).addTo(map);
+
+      marker.bindPopup("<b>Aqui se encuentra la UCAB </b> ").openPopup();
+
+      var marker2 = L.marker();
+
+      function onMapClick(e) {
+        marker2
+          .setLatLng(e.latlng)
+          .bindPopup(
+            "<b>Hola </b>" +
+              e.latlng.toString() +
+              "  <i class='fa-regular fa-note-sticky'></i>"
+          )
+          .openPopup()
+          .addTo(map);
+      }
+
+      map.on("click", onMapClick);
+    }
+
+    initMap();
+  </script>
+</Layout>

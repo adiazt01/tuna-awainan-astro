@@ -1,14 +1,18 @@
 ---
-const {username, date, content} = Astro.props
+const {username, date, content,id_map,location } = Astro.props
 console.log(date)
+
+function marcar(){
+  alert("nadie")
+}
 
 ---
 
 <div class="comment">
     <div class="comment-author">{username}</div>
     <div class="comment-date">{date}</div>
-    <p class="comment-text">{content}</p>
-  </div>
+    <p class="comment-text">{content} </p>
+</div>
 
 <style>
   .comment {
@@ -36,4 +40,11 @@ console.log(date)
     color: var(--text-color);
     margin-top: 5px;
   }
+  i{
+    font-size:20px;
+  }
 </style>
+<script src="https://kit.fontawesome.com/d308b98942.js" crossorigin="anonymous"></script>
+<script>
+  
+</script>

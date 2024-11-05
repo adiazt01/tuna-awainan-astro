@@ -42,27 +42,23 @@ try {
 }
 
 // Obtiene el correo electrónico del usuario de la sesión
-const email = session.data.user?.email
+const username = session.data.user?.user_metadata.username
+console.log(username)
 
-//consultamos el correo para obtener los datos del usuario
-/*
-const {data: user, error: errorUser} = await supabase
-  .from('auth.users')
-  .select('email')
-  .eq('email',email)
-
-console.log(user)
-console.log(errorUser)*/
 ---
 <Layout title="dashboard">
   <div class="grid grid-cols-1 xl:grid-cols-2">
     <div class="content">
       <div class="card">
-        <h1>¡Hola! <span>username</span> </h1>
+        <h1>¡Hola! <span>{username}</span> </h1>
         <p>Es bueno verte de nuevo </p>
       </div>
+      <from>
+
+      </from>
+
       <form action="/api/auth/signout">
-        <button class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Sign out</button>
+        <button class="sing_out" type="submit">cerrar sesion</button>
       </form>
     </div>
   
@@ -77,6 +73,9 @@ console.log(errorUser)*/
   body{
     font-family: 'Quicksand Variable', sans-serif;
   }
+  .content{
+    text-align: center;
+  }
   span{
     color: #0cc0df;
   }
@@ -88,7 +87,7 @@ console.log(errorUser)*/
     height: 175px;
     box-shadow: 0 0 15px 0 #00000012;
     border-radius: 25px;
-    margin:80px auto;
+    margin:80px auto 30px auto;
     text-align :center;
   }
   h1{
@@ -110,5 +109,19 @@ console.log(errorUser)*/
     font-size:24px
   }
 
+  .sing_out{
+    background-color: #0cc0df;
+    color: white;
+    font-size:20px;
+    font-weight:500;
+    border-radius:20px;
+    padding:7px;
+    margin-left:auto;
+    box-shadow: 0 0 20px 0 #00000018;
+  }
+  .sing_out:hover{
+    background-color: white;
+    color:#0cc0df;
+  }
 
 </style>

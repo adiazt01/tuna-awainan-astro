@@ -18,21 +18,20 @@ const LINKS = [
 ];
 
 const { cookies } = Astro;
-let currentPath
-let equis=Astro.cookies.get('pagina') 
-if (!equis) {  currentPath = Astro.url.pathname;
-  Astro.cookies.set('pagina',currentPath)}
-else{currentPath = equis}
+let currentPath 
+if (!Astro.cookies.get('pagina')) {
+  currentPath = Astro.url.pathname;
+  Astro.cookies.set('pagina', currentPath);
+}else{
+  currentPath =  Astro.cookies.get('pagina');
+}
+
+
  //para leer la pagina actual
 
 
 const accessToken = cookies.get("sb-access-token");
 const refreshToken = cookies.get("sb-refresh-token");
-
-
-
-
-console.log(equis)
 
 let userId;
 if (accessToken && refreshToken) {

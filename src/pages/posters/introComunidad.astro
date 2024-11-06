@@ -1,8 +1,8 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
+import Layout from "../../layouts/Layout.astro";
 import BackButton from "../../../components/BackButton.astro";
 import ForumCard from "../../../components/ForumCard.astro";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../lib/supabase";
 
 //consultamos los foros
 const { data: foros, error: errorForo } = await supabase
@@ -48,10 +48,11 @@ const { data: categories, error: errorCategories } = await supabase
             <br> Al ser usuario registrado, podrás interactuar y enriquecer el contenido compartiendo tus opiniones a través de los comentarios.
           </p>
           <!-- botton para ir a los post de comunidad -->
+          <a href="/posters/">
           <button           
             class="ajuste-boton  mt-16 md:mt-10 px-4 py-5 md:px-6 md:py-3 rounded-lg bg-[#0aaccb] text-white font-semibold hover:bg-[#0899b0] transition-all duration-300">          
             Ir a los Posts
-          </button>
+          </button></a>
         </div>
       </section>
   

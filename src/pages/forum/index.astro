@@ -1,7 +1,7 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import ForumCard from "../../../components/ForumCard.astro";
-import { supabase } from "../../../lib/supabase";
+import Layout from "../../layouts/Layout.astro";
+import ForumCard from "../../components/ForumCard.astro";
+import { supabase } from "../../lib/supabase";
 
 //consultamos los foros
 const { data: foros, error: errorForo } = await supabase

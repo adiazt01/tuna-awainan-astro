@@ -1,9 +1,9 @@
 ---
 import { convertCompilerOptionsFromJson } from "typescript";
-import Layout from "../../../layouts/Layout.astro";
-import { supabase } from "../../../lib/supabase";
+import Layout from "../../layouts/Layout.astro";
+import { supabase } from "../../lib/supabase";
 import BackButton from "../../../components/BackButton.astro";
-import { getProfileSession } from "../../../utils/auth";
+import { getProfileSession } from "../../utils/auth";
 
 const querySearch = new URLSearchParams(Astro.url.search);
 

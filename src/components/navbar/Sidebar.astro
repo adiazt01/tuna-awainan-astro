@@ -17,18 +17,15 @@ const LINKS = [
 
 
 let { cookies } = Astro;
-let currentPath 
-if (!Astro.cookies.get('pagina')) {
-  if(Astro.cookies.get('pagina')=='/'){
-  currentPath = Astro.url.pathname;
-  Astro.cookies.set('pagina', currentPath);}
-}else{
-  currentPath =  Astro.cookies.get('pagina');
+let currentPath = Astro.url.pathname;
+let lastVisitedPage = cookies.get('last-visited-page');
+
+// If the current path is different from the last visited page, update the cookie
+if (lastVisitedPage !== currentPath) {
+  cookies.set('last-visited-page', currentPath, { path: '/', httpOnly: true });
 }
 
-
  //para leer la pagina actual
-
 
 const accessToken = cookies.get("sb-access-token");
 const refreshToken = cookies.get("sb-refresh-token");
@@ -55,6 +52,18 @@ if (accessToken && refreshToken) {
 }
 
 ---
+<script>
+  // Check if the last visited page cookie exists
+  const lastVisitedPage = document.cookie.split('; ').find(row => row.startsWith('last-visited-page='));
+  if (lastVisitedPage) {
+    const lastPage = lastVisitedPage.split('=')[1];
+    // Redirect to the last visited page
+    if (lastPage && lastPage !== window.location.pathname) {
+      window.location.href = lastPage;
+    }
+  }
+</script>
+
 
 <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-gray-50 flex flex-col justify-center items-center -translate-x-full sm:translate-x-0" aria-label="Sidebar">
     

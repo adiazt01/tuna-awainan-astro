@@ -7,10 +7,8 @@ import { AstroCookies } from "astro";
 const LINKS = [
     { label: 'Inicio', link: '/' },
     { label: 'Novedades', link: '/novedades'},
-    { label: 'Expertos', link: '/comunity/forum/introExpertos' },
     { label: 'Comunidad', link: '/comunity/posters' },
-    { label: 'Acuario', link: '/aquarium/' },
-    { label: 'Comunidad', link: '/comunity/posters' }, 
+    { label: 'Expertos', link: '/comunity/forum/introExpertos' },   
     { label: 'Artículos', link: '/categories/articles?name=' },
     { label: 'Acuario', link: '/aquarium/' },
     { label: 'Sobre nosotros', link: '/about' },
@@ -72,7 +70,7 @@ if (accessToken && refreshToken) {
               
            
               <li>            
-                  <SidebarItem id="sidebar" link={link.link} label={link.label} actual={currentPath} />
+                  <SidebarItem id="sidebar" link={link.link} label={link.label} actual={Astro.url.pathname} />
                  
               </li>
           ))}

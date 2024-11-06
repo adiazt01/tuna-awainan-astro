@@ -19,6 +19,13 @@ const LINKS = [
 let { cookies } = Astro;
 let currentPath = Astro.url.pathname;
 
+
+
+
+// If the current path is different from the last visited page, update the cookie
+
+ //para leer la pagina actual
+
 const accessToken = cookies.get("sb-access-token");
 const refreshToken = cookies.get("sb-refresh-token");
 

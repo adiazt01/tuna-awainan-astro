@@ -4,7 +4,6 @@ import BackButton from "../../../components/BackButton.astro";
 import Layout from "../layouts/Layout.astro";
 
 import { supabase } from "../lib/supabase";
-import BackButton from "../../../components/BackButton.astro";
 
 // Obtener los parámetros de búsqueda de la URL
 const querySearch = new URLSearchParams(Astro.url.search);
@@ -32,9 +31,6 @@ const { data: categories, error: errorCategories } = await supabase
   .order("name", { ascending: true })
   
 // Redirigir a la página 404 si la página es inválida
-if (!totalArticles || errorTotalArticles) {
-  return Astro.redirect("/404");
-}
 
 ---
 
@@ -116,9 +112,7 @@ if (!totalArticles || errorTotalArticles) {
       </div>
 
       
-      <div class="flex justify-center mt-8">
-       
-      </div>
+      
     </div>
 
 

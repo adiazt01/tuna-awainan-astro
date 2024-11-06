@@ -1,8 +1,8 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
+import Layout from "../../layouts/Layout.astro";
 import BackButton from "../../../components/BackButton.astro";
 import ForumCard from "../../../components/ForumCard.astro";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../lib/supabase";
 
 //consultamos los foros
 const { data: foros, error: errorForo } = await supabase
@@ -26,6 +26,7 @@ const { data: categories, error: errorCategories } = await supabase
         <!-- Contenedor de categorias o fltro comunidad-->
         <div class="flex flex-wrap justify-center space-x-4 overflow-x-auto hide-scroll-bar">
           {
+            
             categories.map((category) => (
             <a
               href={`/categories/articles?name=${category.name}`}
@@ -36,6 +37,7 @@ const { data: categories, error: errorCategories } = await supabase
             </a>
             ))
           }
+          
         </div>
       </div>
   

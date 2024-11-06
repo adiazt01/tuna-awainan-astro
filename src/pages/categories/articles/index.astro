@@ -29,6 +29,7 @@ const { data: categories, error: errorCategories } = await supabase
   .from("tags")
   .select("name, id")
   .order("name", { ascending: true })
+  
 // Redirigir a la página 404 si la página es inválida
 if (!totalArticles || errorTotalArticles) {
   return Astro.redirect("/404");

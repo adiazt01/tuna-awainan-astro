@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { supabase } from "../lib/supabase";
+import '@fontsource-variable/quicksand';
 
 // Obtiene los tokens de acceso y de refresco de las cookies
 const accessToken = Astro.cookies.get("sb-access-token");
@@ -41,12 +42,82 @@ try {
 }
 
 // Obtiene el correo electrónico del usuario de la sesión
-const email = session.data.user?.email;
+const username = session.data.user?.user_metadata.username
+
+
 ---
 <Layout title="dashboard">
-  <h1>Welcome {email}</h1>
-  <p>We are happy to see you here</p>
-  <form action="/api/auth/signout">
-    <button type="submit">Sign out</button>
-  </form>
+  <div class="grid grid-cols-1 xl:grid-cols-2">
+    <div class="content">
+      <div class="card">
+        <h1>¡Hola! <span>{username}</span> </h1>
+        <p>Es bueno verte de nuevo </p>
+      </div>
+      <from>
+
+      </from>
+
+      <form action="/api/auth/signout">
+        <button class="sing_out" type="submit">cerrar sesion</button>
+      </form>
+    </div>
+  <div>
+    <img
+      src="https://socoadventures.net/wp-content/uploads/2023/01/Delta-Orinoco-Rio.webp"
+      class="h-full w-full object-cover"/>
+  </div>
+      
+  </div>
+  
+
 </Layout>
+<style>
+  body{
+    font-family: 'Quicksand Variable', sans-serif;
+  }
+  .content{
+    text-align: center;
+  }
+  span{
+    color: #0cc0df;
+  }
+  h1{
+    text-font: 60px
+  }
+  .card{
+    width: 400px;
+    height: 175px;
+    box-shadow: 0 0 15px 0 #00000012;
+    border-radius: 25px;
+    margin:80px auto 30px auto;
+    text-align :center;
+  }
+  h1{
+    padding-top:30px;
+    font-size:40px;
+    font-weight:600
+  }
+  button{
+    margin-bottom: 15px;
+  }
+  p{
+    font-weight: 500;
+    font-size:24px
+  }
+
+  .sing_out{
+    background-color: #0cc0df;
+    color: white;
+    font-size:20px;
+    font-weight:500;
+    border-radius:20px;
+    padding:7px;
+    margin-left:auto;
+    box-shadow: 0 0 20px 0 #00000018;
+  }
+  .sing_out:hover{
+    background-color: white;
+    color:#0cc0df;
+  }
+
+</style>

@@ -2,20 +2,32 @@
 import SidebarItem from "./SidebarItem.astro";
 import { supabase } from "../../lib/supabase";
 import '@fontsource-variable/quicksand';
+import { AstroCookies } from "astro";
 
 const LINKS = [
     { label: 'Inicio', link: '/' },
+    { label: 'Novedades', link: '/novedades'},
+    { label: 'Comunidad', link: '/comunity/posters' },
+    { label: 'Expertos', link: '/comunity/forum/introExpertos' },   
+    { label: 'Artículos', link: '/categories/articles?name=' },
     { label: 'Acuario', link: '/aquarium/' },
-    { label: 'Artículos', link: '/categories' },
-    { label: 'Foro', link: '/comunity/forum' },
-    { label: 'Posts', link: '/comunity/posters' },
-    { label: 'Nuestro equipo', link: '/about' },
+    { label: 'Sobre nosotros', link: '/about' },
     { label: 'Cuenta', link: '/signin' },
 ];
 
-const currentPath = Astro.url.pathname; //para leer la pagina actual
+let { cookies } = Astro;
+let currentPath 
+if (!Astro.cookies.get('pagina')) {
+  if(Astro.cookies.get('pagina')=='/'){
+  currentPath = Astro.url.pathname;
+  Astro.cookies.set('pagina', currentPath);}
+}else{
+  currentPath =  Astro.cookies.get('pagina');
+}
 
-const { cookies } = Astro;
+
+ //para leer la pagina actual
+
 
 const accessToken = cookies.get("sb-access-token");
 const refreshToken = cookies.get("sb-refresh-token");
@@ -43,6 +55,8 @@ if (accessToken && refreshToken) {
 
 ---
 
+
+
 <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-gray-50 flex flex-col justify-center items-center -translate-x-full sm:translate-x-0" aria-label="Sidebar">
     
   <img src="/src/assets/images/TUNA-awainan.png"
@@ -54,8 +68,10 @@ if (accessToken && refreshToken) {
   <div class="w-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
       <ul class="space-y-2 font-medium">
           {LINKS.map((link, index) => (
-              <li>
-                  <SidebarItem id="sidebar" link={link.link} label={link.label} onClick={() => toggleSidebar()} />
+              
+           
+              <li>            
+                  <SidebarItem id="sidebar" link={link.link} label={link.label} actual={Astro.url.pathname} />
                  
               </li>
           ))}
@@ -63,7 +79,13 @@ if (accessToken && refreshToken) {
   </div>
 </aside>
 
+
+
 <style>
+
+
+
+
   h1{
       font-family: 'Quicksand Variable', sans-serif;
       font-size: 48px;

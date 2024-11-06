@@ -31,7 +31,6 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     }
   });
 
-  console.log(email);
 
 
   console.log(error);

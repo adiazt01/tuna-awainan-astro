@@ -6,31 +6,33 @@ import { supabase } from "../../../lib/supabase";
 //consultamos los foros
 const { data: foros, error: errorForo } = await supabase
   .from("forums")
-  .select("*")
+  .select("*, users!inner(username)")
 
-console.log(foros)
-console.log(errorForo)
 
 ---
 
-<Layout title="Tuna Awainan | Foro">
+<Layout title="Tuna Awainan | Expertos">
 
     <div class=" ">
       {
         foros?(<>
         <h2>Foros publicados: {foros.length}</h2>
-        <h1 class="text-5xl font-bold text-center -mt-4">Foro</h1>
+        <h1 class="text-5xl font-bold text-center -mt-4">Hablando con Expertos</h1>
         {foros?.map((foro)=>(
-            <ForumCard id={foro.id} title={foro.title} content={foro.content} />
+            <ForumCard id={foro.id} title={foro.title} content={foro.content} author={foro.users.username} date={foro.date.toString()}/>
           ))} </>
         ): (
         <h2>No hay foros publicados hasta los momentos.</h2>
         )
       }
+      
     </div>
-  </div>
     
+  <footer class="bg-white h-10p border-1 p-5 text-xs text-bold">
 
+      Tuna awainan no se hace responsable por la información que suban los usuarios a esta página.
+
+    </footer>
 </Layout>
 
 <style>

@@ -2,46 +2,57 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Tuna-Awainan-Nosotros">
+<Layout title="Nosotros | Tuna Awainan">
     <div class="grid grid-cols-1 xl:grid-cols-2">
         <!-- Contenedor principal con una cuadrícula de una columna en pantallas pequeñas y dos columnas en pantallas extra grandes -->
-        <div class="flex flex-col gap-4 items-center justify-center h-screen">
+        <div class="font-custom flex flex-col items-center justify-center h-screen">
             <!-- Contenedor flexible con dirección de columna, espacio entre elementos, centrado y altura de pantalla completa -->
-            <h1
-                class="text-5xl leading-tight text-center font-extrabold text-[#0cc0df]"
-            >
-                SOBRE TUNA <br />AWAINAN
-                <hr>
+            <h1 class="text-5xl leading-tight text-center font-extrabold text-[#0cc0df]">
+                SOBRE TUNA <br />AWAINAN 
             </h1>
+            <hr>
             <!-- Título principal con estilo de texto grande, negrita y color personalizado -->
-            <div style="text-align: justify; " class="font-semibold px-20">
+            <div style="font-family: ; text-align: justify; " class="font-semibold px-20">
                 <!-- Contenedor de texto con fuente seminegrita y padding horizontal -->
                 &ensp; Nuestro objetivo es promover la
 
                 <span class="text-[#0cc0df]"> cultura del agua </span>
                 <span
-                    >en el estado, a fin de mejorar la calidad de vida de sus
+                    >en el estado Bolívar, a fin de mejorar la calidad de vida de sus
                     habitantes. <br>
                 <span class="text-[#0cc0df]"> Tuna awainan </span>
-                <span> es un término en pemón. Significa </span>
+                <span> es un término en pemón que significa </span>
 
                 <span class="text-[#0cc0df]"> agua clara </span>. Los pemones
                 son un pueblo muy cercano al agua. El estado Bolívar, hogar de
                 al menos 30 mil pemones, es también uno de los territorios más
                 ricos en agua dulce de toda Venezuela: pasan por este estado más
                 de una decena de ríos, de los cuales destaca el Orinoco, el
-                tercer Rio más caudaloso mundo. A pesar de esto, apenas
-                un 21% de los hogares de Bolívar cuenta con servicio de agua
-                potable. 
+                tercer Rio más caudaloso mundo. A pesar de esto, apenas un 21% de 
+                los hogares del estado Bolívar cuenta con un buen servicio de agua
+                en cantidad, calidad y frecuencia.
                 </span>
             </div>
         </div>
         <img
-        src="https://media.canva.com/v2/image-resize/format:PNG/height:800/quality:100/uri:s3%3A%2F%2Fmedia-private.canva.com%2FLCXes%2FMAGSZULCXes%2F1%2Fp.png/watermark:F/width:533?csig=AAAAAAAAAAAAAAAAAAAAANkgNzkI8ccCiD4SnnSGBzVdWQbxqJWZu1wtXrvHFYzJ&exp=1730503774&osig=AAAAAAAAAAAAAAAAAAAAAHzg0YrWV55OxrmuhRSXikUH7wfKGbvJsXXRyn9KYdTl&signer=media-rpc&x-canva-quality=screen"
-        class="h-full w-full object-cover"
-    />
+        src="https://static.dw.com/image/65075042_906.jpg"
+        class="h-full w-full object-cover">
+        <!-- <img src="https://unsplash.com/photos/group-of-people-fetching-waters-UwGqtrTheso" 
+        class="h-full w-full object-cover">-->
     </div>
     
 </Layout>
 
-<style></style>
+<style>
+    .font-custom {
+        font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
+    }
+
+    h1{
+        padding-bottom: 0.5em;
+        margin-bottom: .8em;
+        border-bottom-style: ridge;
+        border-bottom-width: thin;    
+    }
+
+</style>

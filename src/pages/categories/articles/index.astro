@@ -2,17 +2,13 @@
 import Image from "astro/components/Image.astro";
 import BackButton from "../../../components/BackButton.astro";
 import Layout from "../../../layouts/Layout.astro";
+
 import { supabase } from "../../../lib/supabase";
+import BackButton from "../../../components/BackButton.astro";
 
 // Obtener los parámetros de búsqueda de la URL
 const querySearch = new URLSearchParams(Astro.url.search);
 const nameQueryToSearch = querySearch.get("name");
-
-// Obtener el número de página actual, por defecto es 1
-const page = parseInt(querySearch.get("page") || "1");
-const articlesPerPage = 3; // Número de artículos por página
-const from = (page - 1) * articlesPerPage; // Índice de inicio
-const to = from + articlesPerPage - 1; // Índice de fin
 
 // // Filtrar los artículos por categoría
 
@@ -23,67 +19,56 @@ const { count: totalArticles, error: errorTotalArticles } = await supabase
   .select("title, id,  tags!inner(*) , coverimage, content", { count: "exact" })
   .ilike("tags.name",`%${nameQueryToSearch}%`)
 
-  
-console.log(totalArticles)
+
 // Obtener los artículos para la página actual
 const { data: articles, error: errorArticles } = await supabase
   .from("articles")
   .select("title, id,  tags!inner(*), coverimage, content")
   .ilike("tags.name", `%${nameQueryToSearch}%`)
-  .range(from, to)
 
 const { data: categories, error: errorCategories } = await supabase
   .from("tags")
   .select("name, id")
   .order("name", { ascending: true })
-  .range(0, 3);
-
-const { data: relatedArticles, error: errorRelatedArticles } = await supabase
-  .from("articles")
-  .select("title, id, tags!inner(*), coverimage, content")
-  .range(0, 2);
-
-// Redirigir a la página 404 si hay errores o no hay artículos
-if (errorArticles) {
-  console.log(errorArticles)
-
-  return Astro.redirect("/404");
-}
-
+  
 // Redirigir a la página 404 si la página es inválida
-if (page < 1 || totalArticles === null || from > totalArticles) {
+if (!totalArticles || errorTotalArticles) {
   return Astro.redirect("/404");
 }
 
-// Calcular si hay más páginas disponibles
-const hasNextPage = to + 1 < totalArticles;
-const hasPreviousPage = page > 1;
 ---
 
 <Layout title="Tuna Awainan: Artículos">
-  <BackButton />
-  <div class="items-center justify-center mt-5">
-    <!-- Botón para la página anterior -->
-    <a
-      href={`/categories/articles?name=${nameQueryToSearch}&page=${page - 1}`}
-      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ml-2 ${!hasPreviousPage ? "pointer-events-none opacity-50" : ""}`}
-    >
-      Anterior
-    </a>
-    <!-- Botón para la página siguiente -->
-    <a
-      href={`/categories/articles?name=${nameQueryToSearch}&page=${page + 1}`}
-      class={`px-4 py-2  text-gray-700 bg-white border rounded-md ml-2 ${!hasNextPage ? "pointer-events-none opacity-50" : ""}`}
-    >
-      Siguiente
-    </a>
+
+  <!--menu de categorias -->
+  <div class="container mx-auto px-4 py-2">
+    <h2 class="font-custom flex justify-center text-2xl font-bold text-pretty mb-4">Otras categorías</h2>
+      <div class="flex justify-center space-x-4 overflow-x-auto hide-scroll-bar">  
+        {
+          categories.map((category) => (
+            <a
+              href={`/categories/articles?name=${category.name}`}
+              class="mb-3 text-gray-700 hover:text-[#0aaccbd4] text-md font-medium bg-gray-100
+              rounded-full px-4 py-1 transition-colors duration-200 whitespace-nowrap dark:bg-gray-800 dark:text-gray-300"
+            >
+              {category.name}
+            </a>
+          ))
+        }
+      </div>
   </div>
-  <section
-    class="w-full px-8 pt-14 gap-24 grid grid-cols-1 lg:grid-cols-2 mx-auto"
-  >
+
+
+  <section class="w-full px-8 pt-8 gap-24 grid grid-cols-1 lg:grid-cols-2 mx-auto">
+
+    <div class="font-custom max-w-screen-xl mx-auto gap-8">
+      <section class="sticky top-0 z-10 w-full bg-white shadow-sm border-b border-gray-100">
+  
     <div class="flex flex-col gap-4">
       <header>
-        <h1 class="text-4xl font-bold text-pretty">Artículos</h1>
+        <!--
+        <h1 class="text-5xl font-bold text-center my-6 mb-4">Artículos</h1>
+        -->
         <p class="text-base text-gray-700 dark:text-gray-400 ">
           {articles.length} Artículos encontrados de la categoría  
           <span>
@@ -91,6 +76,8 @@ const hasPreviousPage = page > 1;
           </span>   
         </p>
       </header>
+
+
 
         <!--aqui se muestran los articulos -->
       <div class="container-article">
@@ -110,9 +97,7 @@ const hasPreviousPage = page > 1;
                   />
                   <div class="flex h-full flex-col justify-between p-4 leading-normal">
                     <h5 class="mb-2 text-2xl text-pretty truncate font-bold tracking-tight text-gray-900 dark:text-white">
-                      {article.title.length > 50
-                        ? article.title.substring(0, 35) + "..."
-                        : article.title}
+                      {article.title}
                     </h5>
                     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
                       {article.content.substring(0, 100) + "..."}
@@ -122,7 +107,7 @@ const hasPreviousPage = page > 1;
                       type="button"
                       class="button text-white mt-auto bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
-                      Leer más
+                      Leer
                     </button>
                   </div>
                 </a>
@@ -137,56 +122,24 @@ const hasPreviousPage = page > 1;
        
       </div>
     </div>
-    <div class="flex flex-col gap-8">
-      <section class="flex flex-col">
-        <h2 class="text-2xl font-bold text-pretty mb-2">Otras categorías</h2>
-        {
-          categories.map((category) => (
-            <a
-              href={`/categories/articles?name=${category.name}`}
-              class="categoria-seleccion bg-blue-100 text-blue-800 text-md
-               font-medium mb-2 me-2 px-2.5 mr-auto py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-            >
-              {category.name}
-            </a>
-          ))
-        }
-      </section>
-      <section class="flex flex-col">
-        <h2 class="text-2xl font-bold text-pretty mb-2">
-          Artículos relacionados
-        </h2>
-        
-        <ul class="flex flex-col gap-8">
-          <!--  Mostrar artículos relacionado-->
-          <div class=""  >
-            {            
-              relatedArticles && relatedArticles.map((article) => (
-                <a
-                  href={`/categories/articles/${article.id}`}
-                  class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-                >
-                  <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    {article.title.length > 50
-                      ? article.title.substring(0, 35) + "..."
-                      : article.title}
-                  </h5>
-                  <p class="font-normal text-gray-700 dark:text-gray-400">
-                    {article.content.substring(0, 100) + "..."}
-                  </p>
-                </a>
-              ))
-            }
-          </div>
-        </ul>
-      </section>
+
+
     </div>
   </section>
 </Layout>
 
+
 <style>
+  .ajuste-izq{
+    left: -4em;
+  }
+
+  .ajuste-der{
+    right: -5em;
+  }
+
   .button{
-      background-color: rgb(10, 172, 203);
+      background-color: #0aaccb;
       color: #fff;
       padding: 10px 20px;
       border: none;
@@ -205,7 +158,7 @@ const hasPreviousPage = page > 1;
     color: #0aaccbd4;
   }
 
-  .categoria-seleccion{
+  /* .categoria-seleccion{
     background-color: #0aaccbc9;
     color: white;
     width: 50%;
@@ -216,9 +169,18 @@ const hasPreviousPage = page > 1;
         background-color: #0aaccbd4;
         box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
         transform: translateY(-2px);
+  } */
+
+/* ocultar la barra de desplazamiento */
+  .hide-scroll-bar {
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+  }
+  .hide-scroll-bar::-webkit-scrollbar {
+    display: none;  
   }
 
-  .container-article{
-
+  .font-custom{
+    font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
   }
 </style>

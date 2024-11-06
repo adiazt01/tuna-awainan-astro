@@ -2,18 +2,19 @@
 interface Props {
     link?: string;
     label: string;
-    onClick?: () => void;
-    id?: string;
-    isActive?: boolean;
+    actual?: string;
+    
 }
 
-const { link, label, onClick, isActive } = Astro.props;
+const { link, label, actual } = Astro.props;
+
 ---
 
 <li>
-    <a href={link} onClick={onClick} class:list={[
+    <a href={link}  class:list={[
         'flex items-center px-3 py-2 text-lg font-medium rounded-md',
-        isActive ? 'bg-[#0cc0df] text-white' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+        actual === link ? 'bg-[#0cc0df] text-white' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+      
     ]}>
         <span class="ms-3">{label.toUpperCase()}</span>
     </a>

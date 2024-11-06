@@ -11,6 +11,29 @@ if (!id) {
   return Astro.redirect("/404");
 }
 
+const { data: articles_tags, error} = await supabase
+  .from('articles_tags')
+  .select('*')
+  .eq("article_id", id.toString())
+  .single();
+
+if(error ||  !articles_tags) {
+
+  return Astro.redirect("/404");
+  
+}
+
+const { data: tags, tags_error} = await supabase
+  .from('tags')
+  .select('*')
+  .eq("id",  articles_tags.tag_id.toString())
+  .single();
+
+if (tags_error || !tags) {
+
+  return Astro.redirect("/404");
+}
+
 // Consulta el post en la base de datos usando el 'id'
 const { data: post, error: postError } = await supabase
   .from("articles")
@@ -30,8 +53,7 @@ const { data: comments, error: commentsError } = await supabase
   .eq("article_id", id?.toString())
   .order("created_at", { ascending: false })
 
-// Muestra los comentarios en la consola para depuración
-console.log(comments);
+
 
 // Si hay un error al obtener los comentarios, lo muestra en la consola
 if (commentsError) {
@@ -129,9 +151,7 @@ if (Astro.request.method === "POST") {
 
 <Layout title={`Tuna Awainan: ${post.title}`}>
   
-  <br>
-  <BackButton />
-
+  <BackButton page = `/categories/articles?name=${tags.name}`/>
   <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl mb-8">
     <img
       src={post.coverimage}
@@ -149,7 +169,7 @@ if (Astro.request.method === "POST") {
     <section class="bg-white dark:bg-gray-900 py-8 lg:py-16 antialiased">
       <div class="max-w-2xl mx-auto px-4">
           <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Comentarios</h2>
+            <h2 class="negro text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Comentarios</h2>
         </div>
         <form class="mb-6 flex flex-col" method="POST">
             <div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -161,7 +181,7 @@ if (Astro.request.method === "POST") {
 
             <button type="submit"
                 class="inline-flex items-center bg-[#0cc0df] ml-auto py-2.5 px-4 text-xs font-medium text-center text-white bg-[p] rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                Post comment
+                Envíar
             </button>
 
         </form>
@@ -196,15 +216,13 @@ if (Astro.request.method === "POST") {
 
 <style>
 p{
-      text-align: justify;
-
+  text-align: justify;
 }
 
   h2{
     font-family: 'Quicksand Variable', sans-serif;
     font-size: 32px;
     font-weight: 700;
-    color: #0cc0df;
   }
 
   .btn-back {

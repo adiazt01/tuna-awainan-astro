@@ -18,12 +18,11 @@ const LINKS = [
 
 let { cookies } = Astro;
 let currentPath = Astro.url.pathname;
-let lastVisitedPage = cookies.get('last-visited-page');
+
+
+
 
 // If the current path is different from the last visited page, update the cookie
-if (lastVisitedPage !== currentPath) {
-  cookies.set('last-visited-page', currentPath, { path: '/', httpOnly: true });
-}
 
  //para leer la pagina actual
 

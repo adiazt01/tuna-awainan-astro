@@ -1,7 +1,7 @@
 ---
-import Layout from "../../../../layouts/Layout.astro";
-import { supabase } from "../../../../lib/supabase";
-import { getProfileSession } from "../../../../utils/auth";
+import Layout from "../../../layouts/Layout.astro";
+import { supabase } from "../../../lib/supabase";
+import { getProfileSession } from "../../../utils/auth";
 
 const { session, profile } = await getProfileSession(Astro);
 

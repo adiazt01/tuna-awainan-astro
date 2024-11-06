@@ -160,7 +160,7 @@ if (Astro.request.method === "POST") {
   <div class="container font-custom">
     <!--bton de regresar -->
     <div class="buttons-container">
-      <BackButton page="/comunity/forum" />
+      <BackButton page="/experts/forum" />
     </div>
 
     <!-- contenedor del contenido del foro -->
@@ -225,6 +225,7 @@ if (Astro.request.method === "POST") {
       </div>
     </div>
   </div>
+</Layout>
 
   <style>
     :root {
@@ -403,6 +404,7 @@ if (Astro.request.method === "POST") {
         map.remove();
       }
 
+
       var map = L.map("map").setView([8.296963, -62.711613], 13);
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
@@ -433,4 +435,3 @@ if (Astro.request.method === "POST") {
 
     initMap();
   </script>
-</Layout>

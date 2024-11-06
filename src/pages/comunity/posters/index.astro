@@ -13,7 +13,7 @@ const from = (page - 1) * articlesPerPage; // Índice de inicio
 const to = from + articlesPerPage - 1; // Índice de fin
 
 //consultamos los pots
-const { data: totalArticles, error: errorTotalArticles } = await supabase
+const { data: posts, error: errorPosts } = await supabase
   .from("blogs")
   .select(
     `*, user_id (
@@ -22,7 +22,7 @@ const { data: totalArticles, error: errorTotalArticles } = await supabase
   )
 
 
-if (errorTotalArticles) {
+if (errorPosts) {
   return Astro.redirect("/404");
 }
 
@@ -47,7 +47,7 @@ const { session, profile } = await getProfileSession(Astro);
     <div class="">
       <ul class="grid grid-cols-1 max-w-screen-xl mx-auto gap-8 px-40 mt-10">
         {
-          totalArticles.map((article) => (
+          posts.map((article) => (
             <article class=" p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
               <a href={`/comunity/posters/${article.id}`} class="block">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -74,7 +74,7 @@ const { session, profile } = await getProfileSession(Astro);
                   class="inline-flex mt-4 ml-auto px-3 py-2 text-sm font-medium text-center text-white  rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   style="background-color: #0cc0df"
                 >
-                  Leer más
+                  Leer 
                   <svg
                     class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
                     aria-hidden="true"

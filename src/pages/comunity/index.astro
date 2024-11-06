@@ -1,0 +1,54 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+---
+
+<Layout title="Tuna Awainan | Comunidad">
+  
+  <div class="min-h-screen flex flex-col">  
+    <!-- Contenedor principal introduccion -->
+    <section class="flex-grow flex flex-col justify-center items-center bg-white text-gray-800 p-4 md:p-8">
+      <div class="text-center max-w-3xl space-y-4 md:space-y-8">
+        <h1 class="text-3xl md:text-4xl font-normal mb-4 text-[#0aaccb]">Comunidad</h1>            
+        <p class="text-md md:text-lg text-gray-800 mb-32">
+          En esta sección, encontrarás foros escritos por expertos en áreas relacionadas con el agua, seleccionados cuidadosamente para brindarte información confiable y actual. 
+          <br> Al ser usuario registrado, podrás interactuar y enriquecer el contenido compartiendo tus opiniones a través de los comentarios.
+        </p>
+        <!-- botton para ir a los articulos -->
+        <button  class="ajuste-boton  mt-16 md:mt-10 px-4 py-5 md:px-6 md:py-3 rounded-lg bg-[#0aaccb] text-white font-semibold hover:bg-[#0899b0] transition-all duration-300">          
+          <a href={`/comunity/posters/`}
+            class="ajuste-boton  mt-16 md:mt-10 px-4 py-5 md:px-6 md:py-3 rounded-lg bg-[#0aaccb] text-white font-semibold hover:bg-[#0899b0] transition-all duration-300">          
+            leer
+          </a>
+        </button>
+
+
+      </div>
+    </section>
+  
+    <footer class="bg-white py-4 text-xs text-center text-gray-600">
+      Tuna Awainan no se hace responsable por la información que suban los usuarios a esta página.
+    </footer>
+  </div>
+</Layout>
+ <!--  
+-->
+<style>
+    .ajuste-boton{
+        margin-top: 4em;
+    }
+
+
+    .hide-scroll-bar {
+      -ms-overflow-style: none;  
+      scrollbar-width: none;  
+    }
+    
+    .hide-scroll-bar::-webkit-scrollbar {
+      display: none;  
+    }
+  
+    h1, p {
+      font-family: "Quicksand Variable", sans-serif;
+    }
+</style>

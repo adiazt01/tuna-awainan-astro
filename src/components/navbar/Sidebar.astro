@@ -15,11 +15,12 @@ const LINKS = [
     { label: 'Cuenta', link: '/signin' },
 ];
 
-const { cookies } = Astro;
+let { cookies } = Astro;
 let currentPath 
 if (!Astro.cookies.get('pagina')) {
+  if(Astro.cookies.get('pagina')='/'){s
   currentPath = Astro.url.pathname;
-  Astro.cookies.set('pagina', currentPath);
+  Astro.cookies.set('pagina', currentPath);}
 }else{
   currentPath =  Astro.cookies.get('pagina');
 }

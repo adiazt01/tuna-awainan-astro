@@ -15,13 +15,22 @@ const LINKS = [
     { label: 'Cuenta', link: '/signin' },
 ];
 
-const currentPath = Astro.url.pathname; //para leer la pagina actual
-
-
 const { cookies } = Astro;
+let currentPath
+let equis=Astro.cookies.get('pagina') 
+if (!equis) {  currentPath = Astro.url.pathname;
+  Astro.cookies.set('pagina',currentPath)}
+else{currentPath = equis}
+ //para leer la pagina actual
+
 
 const accessToken = cookies.get("sb-access-token");
 const refreshToken = cookies.get("sb-refresh-token");
+
+
+
+
+console.log(equis)
 
 let userId;
 if (accessToken && refreshToken) {
@@ -70,7 +79,13 @@ if (accessToken && refreshToken) {
   </div>
 </aside>
 
+
+
 <style>
+
+
+
+
   h1{
       font-family: 'Quicksand Variable', sans-serif;
       font-size: 48px;

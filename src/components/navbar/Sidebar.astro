@@ -18,7 +18,7 @@ const LINKS = [
 let { cookies } = Astro;
 let currentPath 
 if (!Astro.cookies.get('pagina')) {
-  if(Astro.cookies.get('pagina')='/'){s
+  if(Astro.cookies.get('pagina')=='/'){
   currentPath = Astro.url.pathname;
   Astro.cookies.set('pagina', currentPath);}
 }else{

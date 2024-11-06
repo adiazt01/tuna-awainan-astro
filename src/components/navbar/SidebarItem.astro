@@ -11,10 +11,6 @@ const { link, label, actual } = Astro.props;
 ---
 
 <li>
-
-    
-  
-
     <a href={link}  class:list={[
         'flex items-center px-3 py-2 text-lg font-medium rounded-md',
         actual === link ? 'bg-[#0cc0df] text-white' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'

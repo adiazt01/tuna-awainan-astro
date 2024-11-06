@@ -35,6 +35,12 @@ if (!totalArticles || errorTotalArticles) {
 }
 
 
+let counter = 0
+
+if (Astro.cookies.has("counter")) {
+  const cookie = Astro.cookies.get("counter")
+  counter = cookie.number() + 1}
+
 ---
 
 <Layout title="Tuna Awainan: Artículos">

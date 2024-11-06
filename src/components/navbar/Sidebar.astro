@@ -7,18 +7,32 @@ import { AstroCookies } from "astro";
 const LINKS = [
     { label: 'Inicio', link: '/' },
     { label: 'Novedades', link: '/novedades'},
+<<<<<<< HEAD
     { label: 'Expertos', link: '/comunity/forum/introExpertos' },
     { label: 'Comunidad', link: '/comunity/posters/introComunidad' },
+=======
+    { label: 'Comunidad', link: '/comunity/posters' },
+    { label: 'Expertos', link: '/comunity/forum/introExpertos' },   
+>>>>>>> aab9ea5d7e71f87d553db1637ea231351abe9dfc
     { label: 'Artículos', link: '/categories/articles?name=' },
     { label: 'Acuario', link: '/aquarium/' },
     { label: 'Sobre nosotros', link: '/about' },
     { label: 'Cuenta', link: '/signin' },
 ];
 
-const currentPath = Astro.url.pathname; //para leer la pagina actual
+let { cookies } = Astro;
+let currentPath 
+if (!Astro.cookies.get('pagina')) {
+  if(Astro.cookies.get('pagina')=='/'){
+  currentPath = Astro.url.pathname;
+  Astro.cookies.set('pagina', currentPath);}
+}else{
+  currentPath =  Astro.cookies.get('pagina');
+}
 
 
-const { cookies } = Astro;
+ //para leer la pagina actual
+
 
 const accessToken = cookies.get("sb-access-token");
 const refreshToken = cookies.get("sb-refresh-token");
@@ -60,7 +74,7 @@ if (accessToken && refreshToken) {
               
            
               <li>            
-                  <SidebarItem id="sidebar" link={link.link} label={link.label} actual={currentPath} />
+                  <SidebarItem id="sidebar" link={link.link} label={link.label} actual={Astro.url.pathname} />
                  
               </li>
           ))}
@@ -68,7 +82,13 @@ if (accessToken && refreshToken) {
   </div>
 </aside>
 
+
+
 <style>
+
+
+
+
   h1{
       font-family: 'Quicksand Variable', sans-serif;
       font-size: 48px;

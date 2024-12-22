@@ -140,7 +140,7 @@ crossorigin=""></script>
    
     <!--bton de regresar -->
     <div class="buttons-container">
-      <BackButton page="/comunity/posters" />
+      <BackButton page="/posters" />
     </div>
 
     <!-- contenedor del contenido del post -->
@@ -362,7 +362,7 @@ crossorigin=""></script>
     border-radius: 4px;
     font-size: 1rem;
     margin-bottom: 10px;
-    resize: vertical;
+    resize: vetical;
   }
 
   .submit-btn {
@@ -392,26 +392,26 @@ crossorigin=""></script>
 
   import "leaflet";
 
-  var map = L.map('map').setView([8.296963, -62.711613], 13);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
-  var marker = L.marker([8.296963, -62.711613]).addTo(map);
+    const map = L.map('map').setView([8.296963, -62.711613], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+    var marker = L.marker([8.296963, -62.711613]).addTo(map);
 
-  marker.bindPopup("<b>Aqui se encuentra la UCAB</b>").openPopup();
+    marker.bindPopup("<b>Aqui se encuentra la UCAB</b>").openPopup();
 
-  var marker2 = L.marker();
+    var marker2 = L.marker();
 
-  function onMapClick(e) {
-    marker2
-        .setLatLng(e.latlng)
-        .bindPopup("<b>Hola </b>" + e.latlng.toString())
-        .openPopup()
-        .addTo(map);
-        
-  }
+    function onMapClick(e) {
+      marker2
+          .setLatLng(e.latlng)
+          .bindPopup("<b>Hola </b>" + e.latlng.toString())
+          .openPopup()
+          .addTo(map);
+          
+    }
 
-  map.on('click', onMapClick);
+    map.on('click', onMapClick);
 
 </script>

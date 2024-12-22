@@ -1,4 +1,5 @@
 ---
+import BackButton from "../../../components/BackButton.astro";
 import Layout from "../../../layouts/Layout.astro";
 import { supabase } from "../../../lib/supabase";
 import { getProfileSession } from "../../../utils/auth";
@@ -11,6 +12,7 @@ if (session === null && profile.role !== "publisher") {
 
 if (Astro.request.method === "POST") {
     try {
+        
         const data = await Astro.request.formData();
         const title = data.get("title");
         const content = data.get("content");
@@ -25,7 +27,7 @@ if (Astro.request.method === "POST") {
                 {
                     title,
                     content,
-                    user_id: profile.id
+                    user_id: profile.id,
                 },
             ]);
 
@@ -33,7 +35,7 @@ if (Astro.request.method === "POST") {
             throw new Error("Error al crear la publicación");
         }
 
-        return Astro.redirect(`/comunity/posters`);
+        return Astro.redirect(`/posters`);
     } catch (error) {
         console.error(`[ERROR] ${error.message}`);
         return Astro.redirect("/404");
@@ -43,25 +45,73 @@ if (Astro.request.method === "POST") {
 ---
 <Layout title="Crear nuevo post">
 <section class="bg-white dark:bg-gray-900">
+        <!--bton de regresar -->
+    <div class="buttons-container">
+        <BackButton page="/posters" />
+    </div>
     <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">A;adir nueva publicación</h2>
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Añadir nueva publicación</h2>
         <form method="POST">
             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                 <div class="sm:col-span-2">
                     <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titulo</label>
                     <input type="text" name="title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#0cc0df] focus:border-[#0cc0df] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#0cc0df] dark:focus:border-[#0cc0df]" placeholder="Titulo de la publicación" required="">
                 </div>
+                
                 <div class="sm:col-span-2">
                     <label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Contenido
                     </label>
                     <textarea name="content" id="content" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-[#0cc0df] focus:border-[#0cc0df] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#0cc0df] dark:focus:border-[#0cc0df]" placeholder="Contenido de la publicación" required=""></textarea>
                 </div>
+
             </div>
             <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#0cc0df] rounded-lg focus:ring-4 focus:ring-[#0cc0df] dark:focus:ring-[#0cc0df] hover:bg-[#0cc0df]">
             Crear publicación
             </button>
         </form>
     </div>
+
   </section>
 </Layout>
+
+<script is:inline>
+
+    import "leaflet";
+  
+      // Espera a que el DOM esté completamente cargado
+  document.addEventListener('DOMContentLoaded', () => {
+    // Inicializa el mapa con una ubicación por defecto
+    const map = L.map('map').setView([8.296963, -62.711613], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    // Solicita la ubicación actual del usuario
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          // Actualiza la vista del mapa a la ubicación actual del usuario
+          map.setView([latitude, longitude], 13);
+          // Añade un marcador en la ubicación actual del usuario
+          const marker = L.marker([latitude, longitude]).addTo(map);
+          marker.bindPopup("<b>Tu ubicación actual</b>").openPopup();
+        },
+        (error) => {
+          console.error('Error al obtener la ubicación:', error);
+        }
+      );
+    } else {
+      console.error('Geolocalización no es soportada por este navegador.');
+    }
+  });
+  </script>
+
+<style>
+    #map {
+      width: 100%;
+    }
+  </style>
+  

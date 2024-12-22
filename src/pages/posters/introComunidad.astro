@@ -1,19 +1,23 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import BackButton from "../../../components/BackButton.astro";
-import ForumCard from "../../../components/ForumCard.astro";
 import { supabase } from "../../lib/supabase";
 
-//consultamos los foros
 const { data: foros, error: errorForo } = await supabase
   .from("forums")
   .select("*, users!inner(username)")
 
-//categorias
+if (errorForo) {
+  console.error("Error fetching forums:", errorForo);
+}
+
 const { data: categories, error: errorCategories } = await supabase
   .from("tags")
   .select("name, id")
   .order("name", { ascending: true })
+
+if (errorCategories) {
+  console.error("Error fetching categories:", errorCategories);
+}
 
 ---
 
@@ -27,7 +31,7 @@ const { data: categories, error: errorCategories } = await supabase
         <div class="flex flex-wrap justify-center space-x-4 overflow-x-auto hide-scroll-bar">
           {
             
-            categories.map((category) => (
+            (categories || []).map((category) => (
             <a
               href={`/categories/articles?name=${category.name}`}
               class="mb-3 text-white bg-[#0aaccb] hover:bg-[#087b9b] text-md font-medium rounded-full px-4 py-1

@@ -2,7 +2,6 @@
 import { convertCompilerOptionsFromJson } from "typescript";
 import Layout from "../../layouts/Layout.astro";
 import { supabase } from "../../lib/supabase";
-import BackButton from "../../../components/BackButton.astro";
 import { getProfileSession } from "../../utils/auth";
 
 const querySearch = new URLSearchParams(Astro.url.search);
@@ -11,6 +10,23 @@ const page = parseInt(querySearch.get("page") || "1");
 const articlesPerPage = 3; // Número de artículos por página
 const from = (page - 1) * articlesPerPage; // Índice de inicio
 const to = from + articlesPerPage - 1; // Índice de fin
+
+let currentUser = null;
+let userRole = null;
+
+const sessions = await supabase.auth.getSession();
+if (sessions.data.session) {
+  currentUser = sessions.data.session.user;
+  const { data, error } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', currentUser.id)
+    .single();
+
+  if (data) {
+    userRole = data.role;
+  }
+}
 
 //consultamos los pots
 const { data: totalArticles, error: errorTotalArticles } = await supabase
@@ -49,7 +65,7 @@ const { session, profile } = await getProfileSession(Astro);
         {
           totalArticles.map((article) => (
             <article class=" p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-              <a href={`/comunity/posters/${article.id}`} class="block">
+              <a href={`/posters/${article.id}`} class="block">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                   {article.title}
                 </h5>
@@ -57,7 +73,7 @@ const { session, profile } = await getProfileSession(Astro);
               <header class="flex flex-row items-center w-full gap-2">
                 <div>
                   <a
-                    href={`/comunity/posters/${article.id}`}
+                    href={`/posters/${article.id}`}
                     class="text-sm font-semibold text-gray-700 dark:text-gray-200"
                   >
                     {article.user_id.username}
@@ -70,7 +86,7 @@ const { session, profile } = await getProfileSession(Astro);
           
               <div class="flex flex-row w-full items-end justify-end">
                 <a
-                  href={`/comunity/posters/${article.id}`}
+                  href={`/posters/${article.id}`}
                   class="inline-flex mt-4 ml-auto px-3 py-2 text-sm font-medium text-center text-white  rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   style="background-color: #0cc0df"
                 >
@@ -95,9 +111,22 @@ const { session, profile } = await getProfileSession(Astro);
         ))
       }
     </ul>
-    <a href="mailto:grupotunawainan@gmail.com?subject=Solicitud para crear posts&body=Coloque su usuario y escriba la razon del porque quiere crear un post en la pagina."><button class="ml-auto mt-4 mb-10 px-3 py-2 text-lg font-medium text-center text-white rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-    style="background-color: #0cc0df">Solicitar acceso para crear un posts</button></a>
-  </div>
+    {userRole === 'user' && (
+    <a href="mailto:grupotunawainan@gmail.com?subject=Solicitud para crear posts&body=Coloque su usuario y escriba la razon del porque quiere crear un post en la pagina.">
+      <button class="ml-auto mt-4 mb-10 px-3 py-2 text-lg font-medium text-center text-white rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        style="background-color: #0cc0df">
+        Solicitar acceso para crear un posts
+      </button>
+    </a>)}
+        {userRole === 'publisher' && (
+        <a href="/posters/new">
+          <button class="ml-auto mt-4 mb-10 px-3 py-2 text-lg font-medium text-center text-white rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            style="background-color: #0cc0df">
+            Publicar un artículo
+          </button>
+        </a>
+      )}
+    </div>
 </Layout>
 
 <style>

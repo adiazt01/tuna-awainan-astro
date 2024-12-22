@@ -10,7 +10,7 @@ var { id, title, content, author, date , edo} = Astro.props;
             dark:bg-gray-800 dark:hover:bg-gray-700 transition-all duration-200 p-4 min-w-[500px] 
             mx-40 font-custom"> 
     <!-- se muestra la informacion previa del foro -->
-    <a href={`/comunity/forum/${id}`} class=""> 
+    <a href={`/forum/${id}`} class=""> 
       <div class="flex flex-col justify-center">
         <div class="flex justify-between items-center mb-2">
           <span class="author text-xs text-gray-500 dark:text-gray-400">{author} / {date}</span>

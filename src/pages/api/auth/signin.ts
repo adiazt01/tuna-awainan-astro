@@ -23,11 +23,21 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   }
 
   const { access_token, refresh_token } = data.session;
+  const maxAge = 60 * 60 * 24 * 7; // 1 semana
+
   cookies.set("sb-access-token", access_token, {
     path: "/",
+    maxAge,
   });
   cookies.set("sb-refresh-token", refresh_token, {
     path: "/",
+    maxAge,
   });
-  return redirect("/");
+
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: '/novedades',
+    },
+  });
 };

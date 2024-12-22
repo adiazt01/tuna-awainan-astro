@@ -2,6 +2,10 @@
 import { convertCompilerOptionsFromJson } from "typescript";
 import Layout from "../../layouts/Layout.astro";
 import { supabase } from "../../lib/supabase";
+<<<<<<< HEAD
+=======
+import BackButton from "../../components/BackButton.astro";
+>>>>>>> d4ce003ba202615f2b3c24efa693d705b266270e
 import { getProfileSession } from "../../utils/auth";
 
 const querySearch = new URLSearchParams(Astro.url.search);
@@ -90,7 +94,7 @@ const { session, profile } = await getProfileSession(Astro);
                   class="inline-flex mt-4 ml-auto px-3 py-2 text-sm font-medium text-center text-white  rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   style="background-color: #0cc0df"
                 >
-                  Leer más
+                  Leer
                   <svg
                     class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
                     aria-hidden="true"
@@ -111,6 +115,7 @@ const { session, profile } = await getProfileSession(Astro);
         ))
       }
     </ul>
+<<<<<<< HEAD
     {userRole === 'user' && (
     <a href="mailto:grupotunawainan@gmail.com?subject=Solicitud para crear posts&body=Coloque su usuario y escriba la razon del porque quiere crear un post en la pagina.">
       <button class="ml-auto mt-4 mb-10 px-3 py-2 text-lg font-medium text-center text-white rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -127,6 +132,12 @@ const { session, profile } = await getProfileSession(Astro);
         </a>
       )}
     </div>
+=======
+    <a href="mailto:grupotunawainan@gmail.com?subject=Solicitud para crear posts&body=Coloque su usuario y escriba la razon del porque quiere crear un post en la pagina."><button class="ml-auto mt-4 mb-10 px-3 py-2 text-lg font-medium text-center text-white rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    style="background-color: #0cc0df">Solicitar acceso para crear un posts</button></a>
+  </div>
+
+>>>>>>> d4ce003ba202615f2b3c24efa693d705b266270e
 </Layout>
 
 <style>

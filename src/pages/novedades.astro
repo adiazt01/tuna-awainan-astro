@@ -1,58 +1,58 @@
 ---
 import Layout from "../layouts/Layout.astro";
-
 import { supabase } from "../lib/supabase";
 
-// Obtener los parámetros de búsqueda de la URL
-const querySearch = new URLSearchParams(Astro.url.search);
-const nameQueryToSearch = querySearch.get("name");
-
-// // Filtrar los artículos por categoría
-
-
-// Obtener la cantidad total de artículos
-const { count: totalArticles, error: errorTotalArticles } = await supabase
-  .from("articles")
-  .select("title, id,  tags!inner(*) , coverimage, content", { count: "exact" })
-  .ilike("tags.name",`%${nameQueryToSearch}%`)
-
-
-// Obtener los artículos para la página actual
+// Obtener los artículos más recientes
 const { data: articles, error: errorArticles } = await supabase
   .from("articles")
-  .select("title, id,  tags!inner(*), coverimage, content")
-  .ilike("tags.name", `%${nameQueryToSearch}%`)
+  .select("title, id,  tags!inner(*) , coverimage, content", { count: "exact" })
+  //.order("created_at", { ascending: false }) // Asegúrate de que tienes un campo de fecha
+  .limit(5); // Limitar a los 5 artículos más recientes
 
-const { data: categories, error: errorCategories } = await supabase
-  .from("tags")
-  .select("name, id")
-  .order("name", { ascending: true })
-  
-// Redirigir a la página 404 si la página es inválida
+
+// consultamos los foros recientes
+const { data: foros, error: errorForos } = await supabase
+  .from("forums")
+  .select("title, id, content, users!inner(username), date")
+  //.order("date", { ascending: false }) // Asegúrate de que tienes un campo de fecha
+  .limit(5); // Limitar a los 5 foros más recientes
+
+
+  //consultamos los post cominudad
+const { data: totalArticles, error: errorTotalArticles } = await supabase
+  .from("blogs")
+  .select(
+    `*, user_id (
+     username
+      ))`
+  )
+  .limit(5);
+
 
 ---
 
-<Layout title="Tuna Awainan | Artículos">
+<Layout title="Tuna Awainan | Novedades">
 
-  <!-- cotenedor de menu de categorias -->
-  <div class="container mx-auto px-4 py-2 bg-[#0aaccb] ">
-    <h2 class="font-custom flex justify-center text-2xl font-bold text-white mb-4">Categorías</h2>
-    <!-- Contenedor de categorias -->
+  <!--  menu  -->
+  <!-- <div class="mx-auto px-4 py-2 bg-[#0aaccb] font-custom">
+    <h2 class="font-custom flex justify-center text-2xl font-bold text-white mb-4">Tuna Awainan</h2>
     <div class="flex flex-wrap justify-center space-x-4 overflow-x-auto hide-scroll-bar">
-      {
-        categories.map((category) => (
-        <a
-          href={`/categories/articles?name=${category.name}`}
-          class="mb-3 text-white bg-[#0aaccb] hover:bg-[#087b9b] text-md font-medium rounded-full px-4 py-1
-                  transition-colors duration-300 whitespace-nowrap"
-        >
-          {category.name}
+        <a  class="mb-3 text-white bg-[#0aaccb] hover:bg-[#087b9b] text-md font-medium rounded-full px-4 py-1
+        transition-colors duration-300 whitespace-nowrap">
+          link
         </a>
-        ))
-      }
+        <a  class="mb-3 text-white bg-[#0aaccb] hover:bg-[#087b9b] text-md font-medium rounded-full px-4 py-1
+        transition-colors duration-300 whitespace-nowrap">
+          link
+        </a>
+        <a  class="mb-3 text-white bg-[#0aaccb] hover:bg-[#087b9b] text-md font-medium rounded-full px-4 py-1
+        transition-colors duration-300 whitespace-nowrap">
+          link
+        </a>
     </div>
-  </div>
+  </div> -->
 
+<<<<<<< HEAD
   <!--contenedor principal -->
   <section class="w-full px-24 sm:px-5  pt-8 grid grid-cols-1 mx-auto">
     <div class="font-custom max-w-screen-xl mx-auto gap-8">
@@ -70,31 +70,41 @@ const { data: categories, error: errorCategories } = await supabase
           </span>   
         </p>
       </header>
+=======
+>>>>>>> d4ce003ba202615f2b3c24efa693d705b266270e
 
-      <!--aqui se muestran los articulos -->
-      <div class="container-article">
-        <ul class="grid grid-cols-1 max-w-screen-md gap-8">
+  <!-- Contenedor principal -->
+  <section class="container font-custom">
+    <header>
+      <h1 class=" title text-center font-custom">Novedades</h1>
+    </header>
+
+    <!--contenedor de contenidos -->
+    <div class=" content-container">
+
+      <!-- AQUI TIENE QUE IR LAS NOVEDADES Sección de novedades -->
+      <div class="container-article lineaDiv">
+        <h2 class="title-section">Últimas Novedades</h2>
+        <ul class="grid grid-cols-1 max-w-screen-xl gap-8">
           {
-            // Mostrar los artículos
             articles.map((article) => (
               <li class="w-full">
                 <a
                   href={`/categories/articles/${article.id}`}
-                  class="grid grid-cols-1 border-x-lime-100 lg:grid-cols-2 w-full items-start bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 min-h-56"
+                  class="grid grid-cols-1 border-x-lime-100 lg:grid-cols-2 w-full items-stretch bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                 >
                   <img
-                    class="object-cover w-full h-ull min-h-56 rounded-t-lg  md:rounded-none md:rounded-s-lg"
+                    class="object-cover w-full h-full rounded-t-lg md:rounded-none md:rounded-s-lg"
                     src={article.coverimage}
                     alt=""
                   />
-                  <div class="flex h-full flex-col justify-between p-4 leading-normal">
-                    <h5 class="mb-2 text-2xl text-pretty truncate font-bold tracking-tight text-gray-900 dark:text-white">
+                  <div class="flex flex-col justify-between p-4 leading-normal">
+                    <h5 class="mb-2 text-3xl text-pretty truncate font-bold tracking-tight text-gray-900 dark:text-white">
                       {article.title}
                     </h5>
                     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
                       {article.content.substring(0, 100) + "..."}
                     </p>
-  
                     <button
                       type="button"
                       class="button text-white mt-auto bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
@@ -109,59 +119,178 @@ const { data: categories, error: errorCategories } = await supabase
         </ul>
       </div>
 
-      
-      
-    </div>
+      <!-- Sección de articulo -->
+      <div class="container-article lineaDiv">
+        <h2 class="title-section">Artículos Recientes</h2>
+        <ul class="grid grid-cols-1 max-w-screen-xl gap-8">
+          {
+            articles.map((article) => (
+              <li class="w-full">
+                <a
+                  href={`/categories/articles/${article.id}`}
+                  class="grid grid-cols-1 border-x-lime-100 lg:grid-cols-2 w-full items-stretch bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                >
+                  <img
+                    class="object-cover w-full h-full rounded-t-lg md:rounded-none md:rounded-s-lg"
+                    src={article.coverimage}
+                    alt=""
+                  />
+                  <div class="flex flex-col justify-between p-4 leading-normal">
+                    <h5 class="mb-2 text-3xl text-pretty truncate font-bold tracking-tight text-gray-900 dark:text-white">
+                      {article.title}
+                    </h5>
+                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                      {article.content.substring(0, 100) + "..."}
+                    </p>
+                    <button
+                      type="button"
+                      class="button text-white mt-auto bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    >
+                      Leer
+                    </button>
+                  </div>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
 
+      <!-- Sección de Foros Expertos -->
+      <div class="container-article lineaDiv">
+        <h2 class="title-section">Foros Recientes</h2>
+        <ul class="grid grid-cols-1 max-w-screen-lx gap-8">
+          {
+            foros.map((foro) => (
+              <li class="w-full">
+                <a href={`/foros/${foro.id}`}
+                  class="grid grid-cols-1 border-x-lime-100 w-full items-start bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 min-h-56">
+                  
+                  <div class=" gap-2 flex h-full flex-col justify-between p-4 leading-normal">
+                    <div class="flex justify-between items-center mb-2">
+                      <span class="author text-xs text-gray-500 dark:text-gray-400">Autor: {foro.users.username} - {new Date(foro.date ).toLocaleDateString() || "Fecha desconocida"}</span>
+                      <span class="date text-xs text-gray-500 dark:text-gray-400">Bolívar</span>
+                    </div>
+                    <h5 class="mb-2 text-2xl text-pretty truncate font-bold tracking-tight text-gray-900 dark:text-white">
+                      {foro.title}
+                    </h5>
+                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                      {foro.content.substring(0, 100) + "..."}
+                    </p>
+                    {/* <!--aqui se muestran los emojil -->  */}
+                    <div class="emojil flex justify-end space-x-2 mt-4">
+                      <button aria-label="muy feliz"><i class="fas fa-laugh-beam text-[18px] text-[#3ecbe4]"></i></button>
+                      <button aria-label="feliz"><i class="fas fa-smile text-[18px] text-[#3ecbe4]"></i></button>
+                      <button aria-label="normal"><i class="fas fa-meh text-[18px] text-[#3ecbe4]"></i></button>
+                      <button aria-label="triste"><i class="fas fa-frown text-[18px] text-[#3ecbe4]"></i></button>
+                      <button aria-label="enojado"><i class="fas fa-angry text-[18px] text-[#3ecbe4]"></i></button>
+                    </div> 
+                  </div>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Sección de post de comunidad -->
+      <div class="container-article lineaDiv">
+      <h2 class="title-section">Post de la Comunidad</h2>
+      <ul class="grid grid-cols-1 max-w-screen-xl mx-auto gap-8">
+        {
+          totalArticles.map((article) => (
+            <article class=" p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              <a href={`/comunity/posters/${article.id}`} class="block">
+               {/* descripcion del usuario del post */}
+                <div class="flex justify-between items-center mb-2">
+                  <span class="author text-xs text-gray-500 dark:text-gray-400">Autor: {article.user_id.username} - {new Date(article.created_at).toLocaleDateString() || "Fecha desconocida"}</span>
+                  <span class="date text-xs text-gray-500 dark:text-gray-400">Bolívar</span>
+                </div>  
+
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  {article.title}
+                </h5>
+              </a>
+          
+              <div class="flex flex-row w-full items-end justify-end">
+                <a
+                  href={`/comunity/posters/${article.id}`}
+                  class="inline-flex mt-4 ml-auto px-3 py-2 text-sm font-medium text-center text-white  rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  style="background-color: #0cc0df">
+                  Leer
+                </a>
+              </div>
+          </article>
+        ))
+      }
+      </ul>
+      </div>
 
     </div>
   </section>
 </Layout>
 
-
 <style>
-  .ajuste-izq{
-    left: -4em;
+  /*define colores*/
+  :root {
+    --bg-color: #f8f9fa;
+    --text-color: #333;
+    --secondary-text-color: #666;
+    --border-color: #e5e7eb;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+    --btn-color: #0cc0df;
   }
 
-  .ajuste-der{
-    right: -5em;
+  .container{
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
   }
 
-  .button{
-      background-color: #0aaccb;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease-in-out;
+  .content-container {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .grey-section {
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px var(--shadow-color);
+  }
+
+  .button {
+    background-color: #0aaccb;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
   }
 
   .button:hover {
-        background-color: #0aaccbd4;
-        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-        transform: translateY(-2px);
-    }
-
-  span{
-    color: #0aaccbd4;
+    background-color: #0aaccbd4;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
   }
 
-  /* .categoria-seleccion{
-    background-color: #0aaccbc9;
-    color: white;
-    width: 50%;
-    min-width: max-content;
-}
+  .font-custom {
+    font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
+  }
 
-  .categoria-seleccion:hover {
-        background-color: #0aaccbd4;
-        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-        transform: translateY(-2px);
-  } */
-
-/* ocultar la barra de desplazamiento */
+  /* ocultar la barra de desplazamiento */
   .hide-scroll-bar {
     -ms-overflow-style: none;  
     scrollbar-width: none;  
@@ -170,7 +299,31 @@ const { data: categories, error: errorCategories } = await supabase
     display: none;  
   }
 
-  .font-custom{
-    font-family: "Quicksand Variable", "Helvetica", Arial, sans-serif;
+  .lineaDiv{
+    padding-bottom: 3em;
+    border-bottom: 1px solid var(--border-color);
   }
+
+  .title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-top: 1em;
+  }
+
+  .title-section{
+    color: #666666;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin: 2rem 0 1rem;
+    /*
+    margin: 2rem auto 2rem;
+    text-align: -webkit-center;
+    */
+  }
+
+  .author, .date {
+    font-style: italic;
+  }
+
 </style>

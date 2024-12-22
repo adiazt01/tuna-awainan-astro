@@ -52,7 +52,6 @@ const { data: totalArticles, error: errorTotalArticles } = await supabase
     </div>
   </div> -->
 
-<<<<<<< HEAD
   <!--contenedor principal -->
   <section class="w-full px-24 sm:px-5  pt-8 grid grid-cols-1 mx-auto">
     <div class="font-custom max-w-screen-xl mx-auto gap-8">
@@ -66,12 +65,10 @@ const { data: totalArticles, error: errorTotalArticles } = await supabase
         <p class="text-base text-gray-700 dark:text-gray-400 ">
           {articles.length} Artículos encontrados  
           <span>
-            {nameQueryToSearch?.toLowerCase()}
+            {articles.length > 0 ? articles[0].title.toLowerCase() : ""}
           </span>   
         </p>
       </header>
-=======
->>>>>>> d4ce003ba202615f2b3c24efa693d705b266270e
 
   <!-- Contenedor principal -->
   <section class="container font-custom">
